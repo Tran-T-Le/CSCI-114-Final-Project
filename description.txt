@@ -1,0 +1,46 @@
+For the input: 
+we will have 2 files
+input.txt :includes pid, real time order and items (name and quantity)
+menu.txt : include burst time for each item
+
+struct Process
+{
+    int pid; 
+    string arrivalReal; 
+    int arrivalTime;
+    int distinctItemCount;
+    vector<OrderItem> items;
+    int burstTime; 
+    int remainingTime;
+    int memoryNeeded; // Memory
+    ProcessState state;
+};
+enum ProcessState
+{
+    NEW,
+    READY,
+    RUNNING,
+    BLOCKED_MEMORY,
+    TERMINATED
+};
+
+For the memory: 
+a vector<int> , if allocate is pid , if not is 0
+1024 total size
+We use first fit, if dont find enough space -> change state to BLOCKED_MEMORY 
+50 for each item
+Ex: Pho 3 MilkTea 1
+memoryNeeded= 50*3+ 50*1= 200 
+
+Our flow: 
+
+1. The system first reads data from menu.txt and input.txt. //input file
+2. Each process is created and initialized (arrival time, burst time, memory). //input file
+
+3. When a process arrives, it tries to get memory using First-Fit. //memory file
+4. If successful, it goes to READY; otherwise, it is blocked. //memory file
+
+5. Processes are executed until they finish, then memory is released.
+6. Blocked processes are retried when memory becomes available.
+
+7. The system repeats until all processes are done.
