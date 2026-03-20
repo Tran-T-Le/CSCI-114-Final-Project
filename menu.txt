@@ -1,0 +1,9 @@
+Pho 8
+BanhMi 4
+MilkTea 3
+SpringRoll 5
+BunBo 7
+Eggroll 4
+Coffee 3
+Pancit 9
+MangoSmoothie 5
