@@ -15,12 +15,12 @@ struct OrderItem
 struct MenuItem
 {
     string name;
-    int cookTime;
+    int cookTime; // burst time
 };
 
 enum ProcessState
 {
-    NEW,
+    NEW, // initialize state
     READY,
     RUNNING,
     BLOCKED_MEMORY,
@@ -56,18 +56,16 @@ struct Process
 };
 
 vector<MenuItem> loadMenu(string filename);
-
+// Functions to convert time to global time
 int convertToMinutes(const string &timeStr);
-
 int convertToGlobalTime(const string &realTime, const string &openTime);
-
+// Functions to calculate burst time
 int getCookTime(const string &itemName, const vector<MenuItem> &menu);
-
 int calculateBurstTime(const vector<OrderItem> &items,
                        const vector<MenuItem> &menu);
-
+// Function to calculate memory needed
 int calculateMemoryNeeded(const vector<OrderItem> &items);
-
+// Function to load orders (processes)
 vector<Process> loadOrders(const string &filename,
                            const vector<MenuItem> &menu,
                            const string &openTime);

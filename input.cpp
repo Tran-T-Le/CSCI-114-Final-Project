@@ -30,10 +30,7 @@ vector<MenuItem> loadMenu(string filename)
     fin.close();
     return menu;
 }
-
-// ======================
-// Convert time (HH:MM -> minutes)
-// ======================
+// Functions to convert time to global time
 int convertToMinutes(const string &timeStr)
 {
     int hour = stoi(timeStr.substr(0, 2));
@@ -41,18 +38,12 @@ int convertToMinutes(const string &timeStr)
 
     return hour * 60 + minute;
 }
-
-// ======================
-// Convert to global time
-// ======================
 int convertToGlobalTime(const string &realTime, const string &openTime)
 {
     return convertToMinutes(realTime) - convertToMinutes(openTime);
 }
 
-// ======================
-// Find cook time of 1 item
-// ======================
+// Fumctions to calculate burst time
 int getCookTime(const string &itemName, const vector<MenuItem> &menu)
 {
     for (const auto &item : menu)
@@ -65,10 +56,6 @@ int getCookTime(const string &itemName, const vector<MenuItem> &menu)
 
     return 0;
 }
-
-// ======================
-// Calculate burst time
-// ======================
 int calculateBurstTime(const vector<OrderItem> &items,
                        const vector<MenuItem> &menu)
 {
@@ -96,7 +83,7 @@ int calculateMemoryNeeded(const vector<OrderItem> &items)
         totalQuantity += item.quantity;
     }
 
-    return totalQuantity * 50; // mỗi món = 50 units
+    return totalQuantity * 50; // each item = 50 units
 }
 
 // ======================
@@ -145,6 +132,9 @@ vector<Process> loadOrders(const string &filename,
 
         // calculate memory
         p.memoryNeeded = calculateMemoryNeeded(p.items);
+        cout << "P" << p.pid << ": arrival=" << p.arrivalTime
+             << " burst=" << p.burstTime
+             << " memory=" << p.memoryNeeded << endl;
 
         processes.push_back(p);
     }
