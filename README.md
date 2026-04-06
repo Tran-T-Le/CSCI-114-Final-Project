@@ -1,0 +1,92 @@
+
+struct Process
+{
+    int pid; 
+    string arrivalReal; 
+    int arrivalTime;
+    int distinctItemCount;
+    vector<OrderItem> items;
+    int burstTime; // burst time 
+    int remainingTime;
+    int memoryNeeded; // Memory
+    ProcessState state;
+};
+enum ProcessState
+{
+    NEW,
+    READY,
+    RUNNING,
+    BLOCKED_MEMORY,
+    TERMINATED
+};
+
+
+
+
+Our flow: 
+1. The system first reads data from menu.txt and input.txt. //input file
+2. Each process is created and initialized (arrival time, burst time, memory). //input file
+3. Execution: check memory-> choose process to run-> release  // memory, scheduler and simulation file
+
+
+
+
+
+For the input: 
+we will have 2 files
+input.txt :includes pid, real time they order and items(name and quantity)
+menu.txt : include burst time for each item
+
+
+
+
+
+For the memory: 
+Memory is a vector<int> with a total size of 1024.
+Each element in the vector is either:
+    0 → free space
+    pid → occupied by a process
+We use the First-Fit method to allocate memory:
+    The system searches for the first contiguous free space that is large enough.
+    If found, all elements in that space are set to the process’s pid and change state to READY
+    If not found, the process state is changed to BLOCKED_MEMORY.
+Each item needs 50 units of memory per quantity.
+Example:
+    Pho 3, MilkTea 1 → memoryNeeded = 200
+
+
+
+
+For the execution:
+First we set up:  
+2 vector<process *> to store ready and block list
+Start global time from 0 and increase it by 1 each loop
+
+Start the loop : 
+While not all processes are terminated: 
+    I. Update ready and blocked-memory lists by checking memory:  //memory file
+        1. First, check processes in the blocked list  
+        2. Then, check newly arrived processes (only when arrivalTime == global time)  
+        * Update ready and blocked lists accordingly  
+
+    II. Check if there is a running process:  
+        If there is no running process:  
+            Select a process from the ready list  //scheduler file
+                FCFS and RR: pick the first process  
+                SJF: pick the process with the shortest burst time  
+        If there is a running process:  
+            Decrease its remaining time  
+            Increase the quantum counter (for RR only)  
+            Check the remaining time:  
+                If remainingTime == 0:  
+                    Change state to TERMINATED  
+                    Release its memory  
+                If remainingTime != 0:  
+                    Check quantum (RR only)  
+                        If quantum expires:  
+                            Move process back to READY  
+
+    III. Increase global time by 1  
+
+
+    
