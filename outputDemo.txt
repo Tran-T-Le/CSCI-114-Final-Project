@@ -1,0 +1,180 @@
+P101: arrival=0 burst=10 memory=200
+P102: arrival=2 burst=4 memory=100
+P103: arrival=2 burst=5 memory=100
+P104: arrival=15 burst=10 memory=250
+P105: arrival=20 burst=12 memory=250
+FCFS Simulation:
+
+Time 0
+P101 READY
+Running P101
+Memory used: 200/1024
+
+Time 1
+Running P101
+Memory used: 200/1024
+
+Time 2
+P102 READY
+P103 READY
+Running P101
+Memory used: 400/1024
+
+Time 3
+Running P101
+Memory used: 400/1024
+
+Time 4
+Running P101
+Memory used: 400/1024
+
+Time 5
+Running P101
+Memory used: 400/1024
+
+Time 6
+Running P101
+Memory used: 400/1024
+
+Time 7
+Running P101
+Memory used: 400/1024
+
+Time 8
+Running P101
+Memory used: 400/1024
+
+Time 9
+Running P101
+P101 DONE
+Memory used: 200/1024
+
+Time 10
+Running P102
+Memory used: 200/1024
+
+Time 11
+Running P102
+Memory used: 200/1024
+
+Time 12
+Running P102
+Memory used: 200/1024
+
+Time 13
+Running P102
+P102 DONE
+Memory used: 100/1024
+
+Time 14
+Running P103
+Memory used: 100/1024
+
+Time 15
+P104 READY
+Running P103
+Memory used: 350/1024
+
+Time 16
+Running P103
+Memory used: 350/1024
+
+Time 17
+Running P103
+Memory used: 350/1024
+
+Time 18
+Running P103
+P103 DONE
+Memory used: 250/1024
+
+Time 19
+Running P104
+Memory used: 250/1024
+
+Time 20
+P105 READY
+Running P104
+Memory used: 500/1024
+
+Time 21
+Running P104
+Memory used: 500/1024
+
+Time 22
+Running P104
+Memory used: 500/1024
+
+Time 23
+Running P104
+Memory used: 500/1024
+
+Time 24
+Running P104
+Memory used: 500/1024
+
+Time 25
+Running P104
+Memory used: 500/1024
+
+Time 26
+Running P104
+Memory used: 500/1024
+
+Time 27
+Running P104
+Memory used: 500/1024
+
+Time 28
+Running P104
+P104 DONE
+Memory used: 250/1024
+
+Time 29
+Running P105
+Memory used: 250/1024
+
+Time 30
+Running P105
+Memory used: 250/1024
+
+Time 31
+Running P105
+Memory used: 250/1024
+
+Time 32
+Running P105
+Memory used: 250/1024
+
+Time 33
+Running P105
+Memory used: 250/1024
+
+Time 34
+Running P105
+Memory used: 250/1024
+
+Time 35
+Running P105
+Memory used: 250/1024
+
+Time 36
+Running P105
+Memory used: 250/1024
+
+Time 37
+Running P105
+Memory used: 250/1024
+
+Time 38
+Running P105
+Memory used: 250/1024
+
+Time 39
+Running P105
+Memory used: 250/1024
+
+Time 40
+Running P105
+P105 DONE
+Memory used: 0/1024
