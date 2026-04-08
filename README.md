@@ -7,7 +7,7 @@ So Pho so Good
 
 <p> As we are simulating a operating system with the context of running a resturant a menu is given. Each item on the given menu is a process available for the user to choose. The price of each menu is the turnaround time for each process. </p>
 
-##### The given menu listed below. 
+#### The given menu listed below. 
 
 <ul>
   <li>Pho 3</li>
@@ -24,4 +24,3 @@ So Pho so Good
 <p>-----------------------------------------------------------------------------------------------------------------------------------------------------------</p>
 
 <p> In order for the simulation to work a input is needed. The input must be based off the menu items. </p>
-
