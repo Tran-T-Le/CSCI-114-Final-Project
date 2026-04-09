@@ -3,7 +3,7 @@ So Pho so Good
 
 <p> For this project we are simulating a operating system in the context of running a resturant. The sumulaton was programmed usign C++ on Visual Studio and Visual Studio Code. There is a total of 1024 bytes of memory. Three sheduling practices, which are First Come First Serve (FCFS), Shortest Job First (SJF), and Round Robin (RR). </p>
 
-<p>-----------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+___
 
 <p> As we are simulating a operating system with the context of running a resturant a menu is given. Each item on the given menu is a process available for the user to choose. The price of each menu is the turnaround time for each process. </p>
 
@@ -20,8 +20,7 @@ Coffee 1
 Pancit 2
 MangoSmoothie 1
 ```
-
-<p>-----------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+___
 
 <p> In order for the simulation to work a input is needed. The input must be based off the menu items. </p>
 <p> When "ordering" off the menu the order must be done in a specific way. </p>
