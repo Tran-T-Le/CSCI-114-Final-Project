@@ -7,19 +7,19 @@ So Pho so Good
 
 <p> As we are simulating a operating system with the context of running a resturant a menu is given. Each item on the given menu is a process available for the user to choose. The price of each menu is the turnaround time for each process. </p>
 
-#### The given menu listed below. 
+#### The given menu is listed below. 
 
-<ul>
-  <li>Pho 3</li>
-  <li>BanhMi 2</li>
-  <li>MilkTea 1</li>
-  <li>SpringRoll 2</li>
-  <li>BunBo 3</li>
-  <li>Eggroll 2</li>
-  <li>Coffee 1</li>
-  <li>Pancit 2</li>
-  <li>MangoSmoothie 1</li>
-</ul>
+```
+Pho 3
+BanhMi 2
+MilkTea 1
+SpringRoll 2
+BunBo 3
+Eggroll 2
+Coffee 1
+Pancit 2
+MangoSmoothie 1
+```
 
 <p>-----------------------------------------------------------------------------------------------------------------------------------------------------------</p>
 
@@ -37,3 +37,5 @@ So Pho so Good
 105 08:20 2 Pho 2 SpringRoll 3
 ```
 
+<p> The number listed in the first row is the number of "order" being inserted. </p>
+<p> For the following rows. The first column resporesent the Process ID (PID). The next column is the time the "order" or jobs are inserted and processed. The following are the number of "items" followed by the specific name of the item being ordered. </p>
