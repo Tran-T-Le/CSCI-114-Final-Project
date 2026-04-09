@@ -24,3 +24,7 @@ So Pho so Good
 <p>-----------------------------------------------------------------------------------------------------------------------------------------------------------</p>
 
 <p> In order for the simulation to work a input is needed. The input must be based off the menu items. </p>
+<p> WHen "ordering" off the menu the order must be done in a specific way. </p>
+
+#### An example input would be:
+
