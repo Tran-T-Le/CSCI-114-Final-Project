@@ -24,7 +24,16 @@ So Pho so Good
 <p>-----------------------------------------------------------------------------------------------------------------------------------------------------------</p>
 
 <p> In order for the simulation to work a input is needed. The input must be based off the menu items. </p>
-<p> WHen "ordering" off the menu the order must be done in a specific way. </p>
+<p> When "ordering" off the menu the order must be done in a specific way. </p>
 
 #### An example input would be:
+
+```
+5
+101 08:00 2 Pho 3 MilkTea 1
+102 08:02 1 BanhMi 2
+103 08:02 2 Pho 1 BanhMi 1
+104 08:15 3 BunBo 2 SpringRoll 1 MilkTea 2
+105 08:20 2 Pho 2 SpringRoll 3
+```
 
