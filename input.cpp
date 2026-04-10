@@ -6,7 +6,7 @@
 using namespace std;
 
 // ======================
-// Load MENU
+// 1. Load MENU
 // ======================
 vector<MenuItem> loadMenu(string filename)
 {
@@ -30,6 +30,9 @@ vector<MenuItem> loadMenu(string filename)
     fin.close();
     return menu;
 }
+// ======================
+// 2. Calculate burst time
+// ======================
 // Functions to convert time to global time
 int convertToMinutes(const string &timeStr)
 {
@@ -72,7 +75,7 @@ int calculateBurstTime(const vector<OrderItem> &items,
 }
 
 // ======================
-// Calculate memory needed
+// 3. Calculate memory needed
 // ======================
 int calculateMemoryNeeded(const vector<OrderItem> &items)
 {
@@ -82,63 +85,52 @@ int calculateMemoryNeeded(const vector<OrderItem> &items)
     {
         totalQuantity += item.quantity;
     }
-
-    return totalQuantity * 50; // each item = 50 units
+    return totalQuantity * 100; // each item = 100 units
 }
 
 // ======================
-// Load ORDERS
+// 4. Load ORDERS
 // ======================
-vector<Process> loadOrders(const string &filename,
-                           const vector<MenuItem> &menu,
-                           const string &openTime)
+vector<Process> loadOrders(const string &filename, const vector<MenuItem> &menu, const string &openTime)
 {
     vector<Process> processes;
-
     ifstream fin(filename);
-
     if (!fin.is_open())
     {
         cout << "Error: cannot open orders file\n";
         return processes;
     }
-
     int n;
     fin >> n;
-
     for (int i = 0; i < n; i++)
     {
         Process p;
-
         fin >> p.pid >> p.arrivalReal >> p.distinctItemCount;
-
         p.items.clear();
-
         for (int j = 0; j < p.distinctItemCount; j++)
         {
             OrderItem item;
-
             fin >> item.name >> item.quantity;
-
             p.items.push_back(item);
         }
-
         // convert time
         p.arrivalTime = convertToGlobalTime(p.arrivalReal, openTime);
-
         // calculate burst
         p.burstTime = calculateBurstTime(p.items, menu);
         p.remainingTime = p.burstTime;
-
         // calculate memory
         p.memoryNeeded = calculateMemoryNeeded(p.items);
+        processes.push_back(p);
+    }
+    fin.close();
+    return processes;
+}
+void printProcesses(vector<Process> processes)
+{
+    for (const auto p : processes)
+    {
         cout << "P" << p.pid << ": arrival=" << p.arrivalTime
              << " burst=" << p.burstTime
              << " memory=" << p.memoryNeeded << endl;
-
-        processes.push_back(p);
     }
-
-    fin.close();
-    return processes;
 }

@@ -31,14 +31,12 @@ struct Process
 {
     int pid;
     string arrivalReal;
-    int arrivalTime;
-
+    int arrivalTime; // in minutes from open time
     int distinctItemCount;
     vector<OrderItem> items;
-
-    int burstTime;
+    int burstTime; // total cook time
     int remainingTime;
-    int memoryNeeded;
+    int memoryNeeded; // memory needed based on items
 
     ProcessState state;
 
@@ -56,6 +54,7 @@ struct Process
 };
 
 vector<MenuItem> loadMenu(string filename);
+
 // Functions to convert time to global time
 int convertToMinutes(const string &timeStr);
 int convertToGlobalTime(const string &realTime, const string &openTime);
@@ -63,8 +62,10 @@ int convertToGlobalTime(const string &realTime, const string &openTime);
 int getCookTime(const string &itemName, const vector<MenuItem> &menu);
 int calculateBurstTime(const vector<OrderItem> &items,
                        const vector<MenuItem> &menu);
+
 // Function to calculate memory needed
 int calculateMemoryNeeded(const vector<OrderItem> &items);
+
 // Function to load orders (processes)
 vector<Process> loadOrders(const string &filename,
                            const vector<MenuItem> &menu,

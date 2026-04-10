@@ -19,8 +19,17 @@ enum ProcessState
     BLOCKED_MEMORY,
     TERMINATED
 };
-
-
+Log example output:
+🟢 Arrival
+[time=0] job=P1 ARRIVED -> READY
+🔴 Blocked
+[time=0] job=P2 BLOCKED (no memory)
+🟡 Running
+[time=2] job=P1 RUNNING remaining=3
+🔵 Finished
+[time=5] job=P1 FINISHED -> TERMINATED
+🟣 Time slice (RR)
+[time=4] job=P1 TIME_SLICE_EXPIRED -> READY
 
 
 Our flow: 
