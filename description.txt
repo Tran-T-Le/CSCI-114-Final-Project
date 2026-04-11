@@ -58,7 +58,7 @@ Each element in the vector is either:
 We use the First-Fit method to allocate memory:
     The system searches for the first contiguous free space that is large enough.
     If found, all elements in that space are set to the process’s pid and change state to READY
-    If not found, the process state is changed to BLOCKED_MEMORY.
+    If not found, the process state is changed to BLOCKED.
 Each item needs 50 units of memory per quantity.
 Example:
     Pho 3, MilkTea 1 → memoryNeeded = 200
@@ -74,14 +74,16 @@ Start global time from 0 and increase it by 1 each loop
 Start the loop : 
 While not all processes are terminated: 
     I. Update ready and blocked-memory lists by checking memory:  //memory file
-        1. First, check processes in the blocked list  
-        2. Then, check newly arrived processes (only when arrivalTime == global time)  
-        * Update ready and blocked lists accordingly  
+        1. First, check processes in the blocked list ( if any process could allocate memory-> push in blocked list) 
+        2. Then, check newly arrived processes (only when its arrivalTime == global time)  
+            . if any process could allocate memory-> push to ready queue
+            . else(could not allocate memory) -> push to blocked queue
+        * Update ready and blocked lists accordingly (push in ready or blocked queue)
 
     II. Check if there is a running process:  
         If there is no running process:  
             Select a process from the ready list  //scheduler file
-                FCFS and RR: pick the first process  
+                FCFS and RR: pick the first process in the queue 
                 SJF: pick the process with the shortest burst time  
         If there is a running process:  
             Decrease its remaining time  

@@ -1,92 +1,40 @@
+So Pho so Good
+=================
 
-struct Process
-{
-    int pid; 
-    string arrivalReal; 
-    int arrivalTime;
-    int distinctItemCount;
-    vector<OrderItem> items;
-    int burstTime; // burst time 
-    int remainingTime;
-    int memoryNeeded; // Memory
-    ProcessState state;
-};
-enum ProcessState
-{
-    NEW,
-    READY,
-    RUNNING,
-    BLOCKED_MEMORY,
-    TERMINATED
-};
+<p> For this project we are simulating a operating system in the context of running a resturant. The sumulaton was programmed usign C++ on Visual Studio and Visual Studio Code. There is a total of 1024 bytes of memory. Three sheduling practices, which are First Come First Serve (FCFS), Shortest Job First (SJF), and Round Robin (RR). </p>
 
+___
 
+<p> As we are simulating a operating system with the context of running a resturant a menu is given. Each item on the given menu is a process available for the user to choose. The price of each menu is the turnaround time for each process. </p>
 
+#### The given menu is listed below. 
 
-Our flow: 
-1. The system first reads data from menu.txt and input.txt. //input file
-2. Each process is created and initialized (arrival time, burst time, memory). //input file
-3. Execution: check memory-> choose process to run-> release  // memory, scheduler and simulation file
+```
+Pho 3
+BanhMi 2
+MilkTea 1
+SpringRoll 2
+BunBo 3
+Eggroll 2
+Coffee 1
+Pancit 2
+MangoSmoothie 1
+```
+___
 
+<p> In order for the simulation to work a input is needed. The input must be based off the menu items. </p>
+<p> When "ordering" off the menu the order must be done in a specific way. </p>
 
+#### An example input would be:
 
+```
+5
+101 08:00 2 Pho 3 MilkTea 1
+102 08:02 1 BanhMi 2
+103 08:02 2 Pho 1 BanhMi 1
+104 08:15 3 BunBo 2 SpringRoll 1 MilkTea 2
+105 08:20 2 Pho 2 SpringRoll 3
+```
 
-
-For the input: 
-we will have 2 files
-input.txt :includes pid, real time they order and items(name and quantity)
-menu.txt : include burst time for each item
-
-
-
-
-
-For the memory: 
-Memory is a vector<int> with a total size of 1024.
-Each element in the vector is either:
-    0 → free space
-    pid → occupied by a process
-We use the First-Fit method to allocate memory:
-    The system searches for the first contiguous free space that is large enough.
-    If found, all elements in that space are set to the process’s pid and change state to READY
-    If not found, the process state is changed to BLOCKED_MEMORY.
-Each item needs 50 units of memory per quantity.
-Example:
-    Pho 3, MilkTea 1 → memoryNeeded = 200
-
-
-
-
-For the execution:
-First we set up:  
-2 vector<process *> to store ready and block list
-Start global time from 0 and increase it by 1 each loop
-
-Start the loop : 
-While not all processes are terminated: 
-    I. Update ready and blocked-memory lists by checking memory:  //memory file
-        1. First, check processes in the blocked list  
-        2. Then, check newly arrived processes (only when arrivalTime == global time)  
-        * Update ready and blocked lists accordingly  
-
-    II. Check if there is a running process:  
-        If there is no running process:  
-            Select a process from the ready list  //scheduler file
-                FCFS and RR: pick the first process  
-                SJF: pick the process with the shortest burst time  
-        If there is a running process:  
-            Decrease its remaining time  
-            Increase the quantum counter (for RR only)  
-            Check the remaining time:  
-                If remainingTime == 0:  
-                    Change state to TERMINATED  
-                    Release its memory  
-                If remainingTime != 0:  
-                    Check quantum (RR only)  
-                        If quantum expires:  
-                            Move process back to READY  
-
-    III. Increase global time by 1  
-
-
-    
+<p> The number listed in the first row is the number of "order" being inserted. </p>
+<p> For the following rows. The first column resporesent the Process ID (PID). The next column is the time the "order" or jobs are inserted and processed. The following are the number of "items" followed by the specific name of the item being ordered. </p>
