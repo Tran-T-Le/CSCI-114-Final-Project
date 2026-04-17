@@ -37,4 +37,11 @@ ___
 ```
 
 <p> The number listed in the first row is the number of "order" being inserted. </p>
-<p> For the following rows. The first column resporesent the Process ID (PID). The next column is the time the "order" or jobs are inserted and processed. The following are the number of "items" followed by the specific name of the item being ordered. </p>
+<p> For the following rows and columns... </p>
+
+<ul> 
+  <li> The first column resporesent the Process ID (PID). </li>
+  <li> The next column is the time the "order" or jobs are inserted and processed. </li>
+  <li> The following are the number of "items" followed by the specific name of the item being ordered. </li>
+</ul>
+
