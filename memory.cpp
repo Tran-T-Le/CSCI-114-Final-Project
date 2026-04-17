@@ -9,7 +9,7 @@ MemoryManager::MemoryManager(int size)
 }
 
 // First-Fit allocation
-bool MemoryManager::allocate(int pid, int sizeNeeded)
+int MemoryManager::allocate(int pid, int sizeNeeded)
 {
     int count = 0;
     int start = -1;
@@ -30,7 +30,7 @@ bool MemoryManager::allocate(int pid, int sizeNeeded)
                 {
                     memory[j] = pid;
                 }
-                return true;
+                return start;
             }
         }
         else
@@ -39,7 +39,7 @@ bool MemoryManager::allocate(int pid, int sizeNeeded)
         }
     }
 
-    return false;
+    return -1; // allocation failed
 }
 
 // release memory
@@ -57,13 +57,29 @@ void MemoryManager::release(int pid)
 // debug
 void MemoryManager::display()
 {
-    int used = 0;
+    int i = 0;
+    cout << "Memory: ";
 
-    for (int x : memory)
+    while (i < totalSize)
     {
-        if (x != 0)
-            used++;
+        int current = memory[i];
+        int count = 0;
+
+        while (i < totalSize && memory[i] == current)
+        {
+            count++;
+            i++;
+        }
+
+        if (current == 0)
+        {
+            cout << "[" << count << " FREE] ";
+        }
+        else
+        {
+            cout << "[" << count << " P" << current << "] ";
+        }
     }
 
-    cout << "Memory used: " << used << "/" << totalSize << endl;
+    cout << endl;
 }

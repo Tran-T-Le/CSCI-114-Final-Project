@@ -13,7 +13,7 @@ private:
 public:
     MemoryManager(int size = 1024);
 
-    bool allocate(int pid, int sizeNeeded);
+    int allocate(int pid, int sizeNeeded);
 
     void release(int pid);
 
