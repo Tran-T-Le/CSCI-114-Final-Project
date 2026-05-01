@@ -17,7 +17,7 @@ public:
 
     void release(int pid);
 
-    void display();
+    void display(int time);
 };
 
 #endif

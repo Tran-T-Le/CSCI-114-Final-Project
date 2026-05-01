@@ -36,6 +36,12 @@ public:
               SchedulingPolicy schedulingPolicy,
               int timeQuantum,
               int memorySize);
+
+    // Utility functions
+    string policyToString(SchedulingPolicy p);
+    string formatQueue(const vector<Process *> &q);
+
+    // Main simulation function
     void printGanttPerProcess() const;
     void run();
 };

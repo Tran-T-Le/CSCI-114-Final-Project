@@ -55,31 +55,28 @@ void MemoryManager::release(int pid)
 }
 
 // debug
-void MemoryManager::display()
+void MemoryManager::display(int time)
 {
+    cout << "[t=" << time << "] Memory: ";
+
     int i = 0;
-    cout << "Memory: ";
-
-    while (i < totalSize)
+    while (i < (int)memory.size())
     {
-        int current = memory[i];
-        int count = 0;
+        int pid = memory[i];
+        int start = i;
 
-        while (i < totalSize && memory[i] == current)
+        while (i < (int)memory.size() && memory[i] == pid)
         {
-            count++;
             i++;
         }
 
-        if (current == 0)
-        {
-            cout << "[" << count << " FREE] ";
-        }
+        int end = i - 1;
+
+        if (pid == 0)
+            cout << "[" << start << ".." << end << " FREE] ";
         else
-        {
-            cout << "[" << count << " P" << current << "] ";
-        }
+            cout << "[" << start << ".." << end << " P" << pid << "] ";
     }
 
-    cout << endl;
+    cout << "\n";
 }
