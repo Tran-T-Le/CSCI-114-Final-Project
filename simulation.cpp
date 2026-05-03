@@ -1,10 +1,24 @@
 #include "simulation.h"
 
-// Constructor
+void Simulator::Systemstate() {
+    cout << endl << "---- SYSTEM STATE ----" << endl;
+
+    cout << "Running: ";
+    if (running) cout << "P" << running->pid << endl;
+    else cout << "NONE" << endl;
+
+    cout << "Ready Queue: " << formatQueue(ready) << endl;
+    cout << "Blocked (Memory): " << formatQueue(blockedMemory) << endl;
+    cout << "Blocked (Stove): " << formatQueue(blockedStove) << endl;
+    cout << "Blocked (Payment): " << formatQueue(blockedPayment) << endl;
+
+    cout << "---------------------" << endl;;
+}
+
 Simulator::Simulator(const vector<Process>& processList,
     SchedulingPolicy schedulingPolicy, int timeQuantum, int memorySize, string logfile)
     : processes(processList), policy(schedulingPolicy), quantum(timeQuantum),
-    mem(memorySize), CPUStove("Stove"), logger(logfile)
+    mem(memorySize), CPUStove("Stove"), PaymentTerminal("PaymentTerminal"), logger(logfile)
 {
     currentTime = 0;
     finishedCount = 0;
@@ -12,56 +26,14 @@ Simulator::Simulator(const vector<Process>& processList,
     running = nullptr;
 }
 
-void Simulator::printGanttPerProcess() const
-{
-    if (gantt.empty())
-    {
-        cout << "\n========== FINAL GANTT (PER PROCESS) ==========\n";
-        cout << "No execution history.\n";
-        return;
-    }
-
-    int maxTime = gantt.back().end;
-    map<int, vector<char>> timeline;
-
-    // Create all rows first
-    for (const auto& p : processes)
-    {
-        timeline[p.pid] = vector<char>(maxTime, '-');
-    }
-
-    // Mark running slots
-    for (const auto& g : gantt)
-    {
-        for (int t = g.start; t < g.end; t++)
-        {
-            timeline[g.pid][t] = 'X';
-        }
-    }
-
-    for (const auto& p : processes)
-    {
-        cout << "P" << p.pid << ":  ";
-        for (int t = 0; t < maxTime; t++)
-        {
-            cout << timeline[p.pid][t] << " ";
-        }
-        cout << "\n";
-    }
-}
-
 string Simulator::policyToString(SchedulingPolicy p)
 {
     switch (p)
     {
-    case FCFS:
-        return "FCFS";
-    case SJF:
-        return "SJF";
-    case RR:
-        return "RR";
-    default:
-        return "UNKNOWN";
+    case FCFS: return "FCFS";
+    case SJF:  return "SJF";
+    case RR:   return "RR";
+    default:   return "UNKNOWN";
     }
 }
 
@@ -74,122 +46,250 @@ string Simulator::formatQueue(const vector<Process*>& q)
     return s;
 }
 
-// Main simulation loop
 void Simulator::run()
 {
-    vector<Process*> ready;
-    vector<Process*> blocked;
-    Process* running = nullptr;
+    blockedMemory.clear();
+    blockedStove.clear();
+    blockedPayment.clear();
 
-    int quantumCounter = 0;
+    ready.clear();
+    running = nullptr;
+
+    quantumCounter = 0;
     int time = 0;
     int done = 0;
 
-    while (done < processes.size())
+    while (done < (int)processes.size())
     {
-        // Retry blocked processes
-        vector<Process*> stillBlocked;
-        for (auto p : blocked) {
-            int start = mem.allocate(p->pid, p->memoryNeeded);
-            if (start != -1) {
-                p->state = READY;
-                ready.push_back(p);
-                logger.log(time, p->pid, "RETRY", "READY", "MEM", p->memoryNeeded, formatQueue(ready));
-            }
-            else {
-                stillBlocked.push_back(p);
-            }
-        }
-        blocked = stillBlocked;
+        cout << "\n========== Time " << time << " ==========\n";
 
-        // Check new arrivals
-        for (auto& p : processes) {
-            if (p.arrivalTime == time && p.state == NEW) {
-                int start = mem.allocate(p.pid, p.memoryNeeded);
-                if (start != -1) {
+        {
+            vector<Process*> still;
+            for (auto* p : blockedMemory)
+            {
+                int slot = mem.allocate(p->pid, p->memoryNeeded);
+                if (slot != -1)
+                {
+                    p->state = READY;
+                    ready.push_back(p);
+                    logger.log(time, p->pid, "MEM_RETRY", "READY",
+                        "MEM", p->memoryNeeded, formatQueue(ready));
+                }
+                else still.push_back(p);
+            }
+            blockedMemory = still;
+        }
+
+        {
+            vector<Process*> still;
+            for (auto* p : blockedPayment)
+            {
+                if (!PaymentTerminal.isBusy())
+                {
+                    PaymentTerminal.request(p->pid);
+                    PaymentTerminal.release();
+
+                    int slot = mem.allocate(p->pid, p->memoryNeeded);
+
+                    if (slot == -1)
+                    {
+                        p->state = BLOCKED_MEMORY;
+                        blockedMemory.push_back(p);
+                    }
+                    else
+                    {
+                        p->state = READY;
+                        ready.push_back(p);
+                    }
+
+                    logger.log(time, p->pid, "PAYMENT_DONE", "READY",
+                        "PaymentTerminal", p->memoryNeeded, formatQueue(ready));
+                }
+                else
+                {
+                    still.push_back(p);
+                }
+            }
+            blockedPayment = still;
+        }
+
+        {
+            vector<Process*> still;
+            for (auto* p : blockedStove)
+            {
+                if (!CPUStove.isBusy())
+                {
+                    CPUStove.request(p->pid);
+                    p->state = READY;
+                    ready.push_back(p);
+
+                    logger.log(time, p->pid, "RETRY_RESOURCE", "READY",
+                        "Stove", p->memoryNeeded, formatQueue(ready));
+                }
+                else
+                {
+                    still.push_back(p);
+                }
+            }
+            blockedStove = still;
+        }
+
+        for (auto& p : processes)
+        {
+            if (p.arrivalTime != time || p.state != NEW) continue;
+
+            cout << "[t=" << time << "] P" << p.pid << " arrived.\n";
+
+            if (!PaymentTerminal.request(p.pid))
+            {
+                p.state = BLOCKED_RESOURCE;
+                blockedPayment.push_back(&p);
+
+                logger.log(time, p.pid, "BLOCKED_RESOURCE", "BLOCKED_RESOURCE",
+                    "PaymentTerminal", p.memoryNeeded, formatQueue(blockedPayment));
+            }
+            else
+            {
+                logger.log(time, p.pid, "ACQUIRE_RESOURCE", "BLOCKED_RESOURCE",
+                    "PaymentTerminal", p.memoryNeeded, "-");
+
+                PaymentTerminal.release();
+
+                int slot = mem.allocate(p.pid, p.memoryNeeded);
+
+                if (slot == -1)
+                {
+                    p.state = BLOCKED_MEMORY;
+                    blockedMemory.push_back(&p);
+                }
+                else
+                {
                     p.state = READY;
                     ready.push_back(&p);
-                    logger.log(time, p.pid, "ARRIVAL", "READY", "MEM", p.memoryNeeded, formatQueue(ready));
-                }
-                else {
-                    p.state = BLOCKED_MEMORY;
-                    blocked.push_back(&p);
-                    logger.log(time, p.pid, "ARRIVAL", "BLOCKED", "MEM", p.memoryNeeded, formatQueue(blocked));
                 }
             }
         }
 
-        // Scheduler picks process
-        if (running == nullptr) {
-            running = selectProcess(ready, policy);
-            if (running != nullptr) {
-                if (CPUStove.isBusy() && CPUStove.getHolder() != running->pid) {
-                    running->state = BLOCKED_MEMORY;
-                    blocked.push_back(running);
-                    running = nullptr;
-                    continue;
+        if (running == nullptr)
+        {
+            Process* candidate = selectProcess(ready, policy);
+
+            if (candidate != nullptr)
+            {
+                if (!CPUStove.request(candidate->pid))
+                {
+                    candidate->state = BLOCKED_RESOURCE;
+                    
+                    blockedStove.push_back(candidate);
+
+                    logger.log(time, candidate->pid, "BLOCKED_RESOURCE", "BLOCKED_RESOURCE",
+                        "Stove", candidate->memoryNeeded,
+                        formatQueue(blockedStove));
                 }
-                if (!CPUStove.request(running->pid)) {
-                    running->state = BLOCKED_MEMORY;
-                    blocked.push_back(running);
-                    running = nullptr;
-                    continue;
+                else
+                {
+                    candidate->state = RUNNING;
+                    running = candidate;
+                    quantumCounter = 0;
+
+                    logger.log(time, running->pid, "SCHEDULE", "RUNNING",
+                        policyToString(policy), running->memoryNeeded, formatQueue(ready));
                 }
-                running->state = RUNNING;
-                quantumCounter = 0;
-                logger.log(time, running->pid, "SCHEDULE", "RUNNING", policyToString(policy),
-                    running->memoryNeeded, formatQueue(ready));
             }
         }
 
-        // Run process
-        if (running != nullptr) {
+        if (running != nullptr)
+        {
             running->remainingTime--;
-            if (policy == RR) {
-                quantumCounter++;
-            }
+            if (policy == RR) quantumCounter++;
 
-            logger.log(time, running->pid, "RUN", "RUNNING", "STOVE", running->memoryNeeded, formatQueue(ready));
+            logger.log(time, running->pid, "RUN", "RUNNING",
+                "STOVE", running->memoryNeeded, formatQueue(ready));
 
             if (gantt.empty() || gantt.back().pid != running->pid)
                 gantt.push_back({ running->pid, time, time + 1 });
             else
                 gantt.back().end++;
 
-            if (running->remainingTime == 0) {
+            if (running->remainingTime == 0)
+            {
                 running->state = TERMINATED;
-                mem.release(running->pid);
-                CPUStove.release();
 
-                logger.log(time, running->pid, "FINISH", "TERMINATED", "STOVE", 0, formatQueue(ready));
-                
+                CPUStove.release();
+                mem.release(running->pid);
+
+                logger.log(time, running->pid, "FINISH", "TERMINATED",
+                    "RELEASE_ALL", 0, formatQueue(ready));
+
                 running = nullptr;
                 done++;
                 quantumCounter = 0;
             }
-            else if (policy == RR && quantumCounter == quantum) {
+
+
+            else if (policy == RR && quantumCounter >= quantum)
+            {
+                CPUStove.release();
+
                 running->state = READY;
                 ready.push_back(running);
-                logger.log(time, running->pid, "TIME_SLICE", "READY", "RR", running->memoryNeeded, formatQueue(ready));
-                running = nullptr;
-                quantumCounter = 0;
+
+                logger.log(time, running->pid, "TIME_SLICE", "READY",
+                    "RR", running->memoryNeeded, formatQueue(ready));
+
+                running = nullptr;    
+                quantumCounter = 0;        
             }
         }
-        else {
+        else
+        {
             cout << "[t=" << time << "] CPU IDLE\n";
         }
-
+        
         mem.display(time);
-        cout << endl;
+        Systemstate();
         time++;
+    }
+
+    printGanttPerProcess();
+}
+
+void Simulator::printGanttPerProcess() const
+{
+    cout << "\n========== FINAL GANTT ==========\n";
+
+    if (gantt.empty())
+    {
+        cout << "No execution history.\n";
+        return;
+    }
+
+    int maxTime = gantt.back().end;
+    map<int, vector<char>> timeline;
+
+    for (const auto& p : processes)
+        timeline[p.pid] = vector<char>(maxTime, '-');
+
+    for (const auto& g : gantt)
+        for (int t = g.start; t < g.end; t++)
+            timeline[g.pid][t] = 'X';
+
+    for (const auto& p : processes)
+    {
+        cout << "P" << p.pid << ": ";
+        for (int t = 0; t < maxTime; t++)
+            cout << timeline[p.pid][t] << " ";
+        cout << "\n";
     }
 }
 
-// Export Gantt chart CSV
-void Simulator::exportGantttoCSV(string filename) {
+void Simulator::exportGantttoCSV(string filename)
+{
     ofstream file(filename);
-    file << "pid,start,end" << endl;
+    file << "pid,start,end\n";
+
     for (auto& g : gantt)
         file << g.pid << "," << g.start << "," << g.end << "\n";
+
     file.close();
 }

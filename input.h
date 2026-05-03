@@ -24,6 +24,7 @@ enum ProcessState
     READY,
     RUNNING,
     BLOCKED_MEMORY,
+    BLOCKED_RESOURCE,
     TERMINATED
 };
 
@@ -31,12 +32,16 @@ struct Process
 {
     int pid;
     string arrivalReal;
-    int arrivalTime; // in minutes from open time
+    int arrivalTime; // minutes from opening time
     int distinctItemCount;
     vector<OrderItem> items;
-    int burstTime; // total cook time
-    int remainingTime;
-    int memoryNeeded; // memory needed based on items
+
+    int burstTime;      // total CPU/kitchen time needed
+    int remainingTime;  // CPU/kitchen time left
+    int memoryNeeded;   // prep-space memory requirement
+
+    bool paymentDone;      // true when the payment terminal step finishes
+    bool memoryAllocated;  // true when First-Fit memory allocation succeeds
 
     ProcessState state;
 

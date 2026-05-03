@@ -59,6 +59,7 @@ int getCookTime(const string& itemName, const vector<MenuItem>& menu)
 
     return 0;
 }
+
 int calculateBurstTime(const vector<OrderItem>& items,
     const vector<MenuItem>& menu)
 {
@@ -127,7 +128,7 @@ vector<Process> loadOrders(const string& filename, const vector<MenuItem>& menu,
 }
 void printProcesses(vector<Process> processes)
 {
-    for (const auto p : processes)
+    for (const auto& p : processes)
     {
         cout << "P" << p.pid << ": arrival=" << p.arrivalTime
             << " burst=" << p.burstTime

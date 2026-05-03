@@ -16,8 +16,8 @@ private:
 public:
     ResourceManager(string n);
 
-    bool request(int pid); //trying to use stove
-    void release(); //Fress up stove space
+    bool request(int pid); // trying to use resource
+    void release();        // free up resource
 
     bool isBusy() const;
     int getHolder() const;

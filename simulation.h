@@ -1,3 +1,6 @@
+#ifndef SIMULATION_H  // [CHANGE 2] added missing include guard
+#define SIMULATION_H
+
 #include <iostream>
 #include <vector>
 #include <map>
@@ -23,12 +26,17 @@ class Simulator
 private:
     vector<Process> processes;
     vector<Process*> ready;
-    vector<Process*> blocked;
+
+    vector<Process*> blockedMemory;
+    vector<Process*> blockedStove;
+    vector<Process*> blockedPayment;
+
     Process* running;
 
-    ResourceManager CPUStove;
-    Logger logger;
+    ResourceManager CPUStove;   
+    ResourceManager PaymentTerminal;    
 
+    Logger logger;
     MemoryManager mem;
     SchedulingPolicy policy;
     int quantum;
@@ -38,17 +46,18 @@ private:
 
     vector<GanttEntry> gantt;
 
+    void Systemstate();
+
 public:
     Simulator(const vector<Process>& processList,
         SchedulingPolicy schedulingPolicy, int timeQuantum, int memorySize, string logfile);
 
-    // Utility functions
     string policyToString(SchedulingPolicy p);
     string formatQueue(const vector<Process*>& q);
 
-    // Main simulation function
     void printGanttPerProcess() const;
     void run();
-
     void exportGantttoCSV(string filename);
 };
+
+#endif
