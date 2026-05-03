@@ -1,11 +1,10 @@
-
 #include "simulation.h"
 
-Simulator::Simulator(const vector<Process> &processList,
-                     SchedulingPolicy schedulingPolicy,
-                     int timeQuantum,
-                     int memorySize)
-    : processes(processList), policy(schedulingPolicy), quantum(timeQuantum), mem(memorySize)
+// Constructor
+Simulator::Simulator(const vector<Process>& processList,
+    SchedulingPolicy schedulingPolicy, int timeQuantum, int memorySize, string logfile)
+    : processes(processList), policy(schedulingPolicy), quantum(timeQuantum),
+    mem(memorySize), CPUStove("Stove"), logger(logfile)
 {
     currentTime = 0;
     finishedCount = 0;
@@ -26,13 +25,13 @@ void Simulator::printGanttPerProcess() const
     map<int, vector<char>> timeline;
 
     // Create all rows first
-    for (const auto &p : processes)
+    for (const auto& p : processes)
     {
         timeline[p.pid] = vector<char>(maxTime, '-');
     }
 
     // Mark running slots
-    for (const auto &g : gantt)
+    for (const auto& g : gantt)
     {
         for (int t = g.start; t < g.end; t++)
         {
@@ -40,7 +39,7 @@ void Simulator::printGanttPerProcess() const
         }
     }
 
-    for (const auto &p : processes)
+    for (const auto& p : processes)
     {
         cout << "P" << p.pid << ":  ";
         for (int t = 0; t < maxTime; t++)
@@ -50,6 +49,7 @@ void Simulator::printGanttPerProcess() const
         cout << "\n";
     }
 }
+
 string Simulator::policyToString(SchedulingPolicy p)
 {
     switch (p)
@@ -64,167 +64,132 @@ string Simulator::policyToString(SchedulingPolicy p)
         return "UNKNOWN";
     }
 }
-string Simulator::formatQueue(const vector<Process *> &q)
+
+string Simulator::formatQueue(const vector<Process*>& q)
 {
-    if (q.empty())
-        return "EMPTY";
-
-    string s = "";
-    for (auto p : q)
-    {
-        s += "P" + to_string(p->pid) + " ";
-    }
-
-    if (!s.empty() && s.back() == ' ')
-        s.pop_back();
-
+    if (q.empty()) return "EMPTY";
+    string s;
+    for (auto p : q) s += "P" + to_string(p->pid) + " ";
+    if (!s.empty() && s.back() == ' ') s.pop_back();
     return s;
 }
 
+// Main simulation loop
 void Simulator::run()
 {
-    vector<Process *> ready;
-    vector<Process *> blocked;
+    vector<Process*> ready;
+    vector<Process*> blocked;
+    Process* running = nullptr;
 
-    Process *running = nullptr;
-
+    int quantumCounter = 0;
     int time = 0;
     int done = 0;
-    int quantumCounter = 0;
 
-    while (done < (int)processes.size())
+    while (done < processes.size())
     {
-        // Retry blocked processes first
-        vector<Process *> stillBlocked;
-        for (auto p : blocked)
-        {
+        // Retry blocked processes
+        vector<Process*> stillBlocked;
+        for (auto p : blocked) {
             int start = mem.allocate(p->pid, p->memoryNeeded);
-
-            if (start != -1)
-            {
+            if (start != -1) {
                 p->state = READY;
                 ready.push_back(p);
-
-                cout << "[t=" << time << "] job=P" << p->pid
-                     << " RETRY after BLOCKED_MEMORY; memory allocated ["
-                     << start << ".." << start + p->memoryNeeded - 1 << "]"
-                     << " -> READY; ReadyQ=" << formatQueue(ready) << "\n";
+                logger.log(time, p->pid, "RETRY", "READY", "MEM", p->memoryNeeded, formatQueue(ready));
             }
-            else
-            {
+            else {
                 stillBlocked.push_back(p);
             }
         }
         blocked = stillBlocked;
 
-        // Check newly arrived processes
-        for (auto &p : processes)
-        {
-            if (p.arrivalTime == time && p.state == NEW)
-            {
+        // Check new arrivals
+        for (auto& p : processes) {
+            if (p.arrivalTime == time && p.state == NEW) {
                 int start = mem.allocate(p.pid, p.memoryNeeded);
-
-                if (start != -1)
-                {
+                if (start != -1) {
                     p.state = READY;
                     ready.push_back(&p);
-
-                    cout << "[t=" << time << "] job=P" << p.pid
-                         << " ARRIVED; memory allocated ["
-                         << start << ".." << start + p.memoryNeeded - 1 << "]"
-                         << " -> READY; ReadyQ=" << formatQueue(ready) << "\n";
+                    logger.log(time, p.pid, "ARRIVAL", "READY", "MEM", p.memoryNeeded, formatQueue(ready));
                 }
-                else
-                {
+                else {
                     p.state = BLOCKED_MEMORY;
                     blocked.push_back(&p);
-
-                    cout << "[t=" << time << "] job=P" << p.pid
-                         << " ARRIVED; insufficient memory"
-                         << " -> BLOCKED_MEMORY; BlockedQ=" << formatQueue(blocked) << "\n";
+                    logger.log(time, p.pid, "ARRIVAL", "BLOCKED", "MEM", p.memoryNeeded, formatQueue(blocked));
                 }
             }
         }
 
-        // If CPU is free, scheduler selects a process
-        if (running == nullptr)
-        {
+        // Scheduler picks process
+        if (running == nullptr) {
             running = selectProcess(ready, policy);
-
-            if (running != nullptr)
-            {
+            if (running != nullptr) {
+                if (CPUStove.isBusy() && CPUStove.getHolder() != running->pid) {
+                    running->state = BLOCKED_MEMORY;
+                    blocked.push_back(running);
+                    running = nullptr;
+                    continue;
+                }
+                if (!CPUStove.request(running->pid)) {
+                    running->state = BLOCKED_MEMORY;
+                    blocked.push_back(running);
+                    running = nullptr;
+                    continue;
+                }
                 running->state = RUNNING;
                 quantumCounter = 0;
-                if (policy == RR)
-                {
-                    cout << "[t=" << time << "] scheduler(" << policyToString(policy)
-                         << ") SELECTED job=P" << running->pid
-                         << " with time quantum=" << quantum
-                         << " (ReadyQ=" << formatQueue(ready) << ")\n";
-                }
-                else
-                {
-                    cout << "[t=" << time << "] scheduler(" << policyToString(policy)
-                         << ") SELECTED job=P" << running->pid
-                         << " (ReadyQ=" << formatQueue(ready) << ")\n";
-                }
+                logger.log(time, running->pid, "SCHEDULE", "RUNNING", policyToString(policy),
+                    running->memoryNeeded, formatQueue(ready));
             }
         }
 
         // Run process
-        if (running != nullptr)
-        {
-            cout << "[t=" << time << "] job=P" << running->pid
-                 << " RUNNING; remaining_burst_time=" << running->remainingTime << "\n";
-
+        if (running != nullptr) {
             running->remainingTime--;
-            quantumCounter++;
+            if (policy == RR) {
+                quantumCounter++;
+            }
 
-            if (gantt.empty())
-            {
-                gantt.push_back({running->pid, time, time + 1});
-            }
-            else if (gantt.back().pid != running->pid || gantt.back().end != time)
-            {
-                gantt.push_back({running->pid, time, time + 1});
-            }
+            logger.log(time, running->pid, "RUN", "RUNNING", "STOVE", running->memoryNeeded, formatQueue(ready));
+
+            if (gantt.empty() || gantt.back().pid != running->pid)
+                gantt.push_back({ running->pid, time, time + 1 });
             else
-            {
                 gantt.back().end++;
-            }
 
-            if (running->remainingTime == 0)
-            {
+            if (running->remainingTime == 0) {
                 running->state = TERMINATED;
                 mem.release(running->pid);
+                CPUStove.release();
 
-                cout << "[t=" << time << "] job=P" << running->pid
-                     << " FINISHED -> TERMINATED\n";
-
+                logger.log(time, running->pid, "FINISH", "TERMINATED", "STOVE", 0, formatQueue(ready));
+                
                 running = nullptr;
                 done++;
                 quantumCounter = 0;
             }
-            else if (policy == RR && quantumCounter == quantum)
-            {
+            else if (policy == RR && quantumCounter == quantum) {
                 running->state = READY;
                 ready.push_back(running);
-
-                cout << "[t=" << time << "] job=P" << running->pid
-                     << " TIME_SLICE_EXPIRED -> READY; ReadyQ="
-                     << formatQueue(ready) << "\n";
-
+                logger.log(time, running->pid, "TIME_SLICE", "READY", "RR", running->memoryNeeded, formatQueue(ready));
                 running = nullptr;
                 quantumCounter = 0;
             }
         }
-        else
-        {
+        else {
             cout << "[t=" << time << "] CPU IDLE\n";
         }
 
         mem.display(time);
-        cout << "\n";
+        cout << endl;
         time++;
     }
+}
+
+// Export Gantt chart CSV
+void Simulator::exportGantttoCSV(string filename) {
+    ofstream file(filename);
+    file << "pid,start,end" << endl;
+    for (auto& g : gantt)
+        file << g.pid << "," << g.start << "," << g.end << "\n";
+    file.close();
 }
