@@ -1,14 +1,14 @@
 #include "scheduler.h"
 
-Process *selectProcess(vector<Process *> &ready, SchedulingPolicy policy)
+Process* selectProcess(vector<Process*>& ready, SchedulingPolicy policy)
 {
-    if (ready.empty())
+    if (ready.empty()) {
         return nullptr;
+    }
 
     // FCFS and RR: take the first process in ready queue
-    if (policy == FCFS || policy == RR)
-    {
-        Process *p = ready.front();
+    if (policy == FCFS || policy == RR) {
+        Process* p = ready.front();
         ready.erase(ready.begin());
         return p;
     }
@@ -17,7 +17,7 @@ Process *selectProcess(vector<Process *> &ready, SchedulingPolicy policy)
     if (policy == SJF)
     {
         int idx = 0;
-        for (int i = 1; i < ready.size(); i++)
+        for (size_t i = 1; i < ready.size(); i++)
         {
             if (ready[i]->remainingTime < ready[idx]->remainingTime)
             {
@@ -25,7 +25,7 @@ Process *selectProcess(vector<Process *> &ready, SchedulingPolicy policy)
             }
         }
 
-        Process *p = ready[idx];
+        Process* p = ready[idx];
         ready.erase(ready.begin() + idx);
         return p;
     }

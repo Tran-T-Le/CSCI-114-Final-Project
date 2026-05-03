@@ -15,15 +15,16 @@ struct OrderItem
 struct MenuItem
 {
     string name;
-    int cookTime; // burst time
+    int cookTime; // burst time for one item
 };
 
 enum ProcessState
 {
-    NEW, // initialize state
+    NEW,
     READY,
     RUNNING,
     BLOCKED_MEMORY,
+    BLOCKED_RESOURCE,
     TERMINATED
 };
 
@@ -31,12 +32,16 @@ struct Process
 {
     int pid;
     string arrivalReal;
-    int arrivalTime; // in minutes from open time
+    int arrivalTime; // minutes from opening time
     int distinctItemCount;
     vector<OrderItem> items;
-    int burstTime; // total cook time
-    int remainingTime;
-    int memoryNeeded; // memory needed based on items
+
+    int burstTime;      // total CPU/kitchen time needed
+    int remainingTime;  // CPU/kitchen time left
+    int memoryNeeded;   // prep-space memory requirement
+
+    bool paymentDone;      // true after the payment terminal step finishes
+    bool memoryAllocated;  // true after First-Fit memory allocation succeeds
 
     ProcessState state;
 
@@ -49,26 +54,21 @@ struct Process
         burstTime = 0;
         remainingTime = 0;
         memoryNeeded = 0;
+        paymentDone = false;
+        memoryAllocated = false;
         state = NEW;
     }
 };
 
 vector<MenuItem> loadMenu(string filename);
 
-// Functions to convert time to global time
-int convertToMinutes(const string &timeStr);
-int convertToGlobalTime(const string &realTime, const string &openTime);
-// Functions to calculate burst time
-int getCookTime(const string &itemName, const vector<MenuItem> &menu);
-int calculateBurstTime(const vector<OrderItem> &items,
-                       const vector<MenuItem> &menu);
+int convertToMinutes(const string& timeStr);
+int convertToGlobalTime(const string& realTime, const string& openTime);
 
-// Function to calculate memory needed
-int calculateMemoryNeeded(const vector<OrderItem> &items);
+int getCookTime(const string& itemName, const vector<MenuItem>& menu);
+int calculateBurstTime(const vector<OrderItem>& items, const vector<MenuItem>& menu);
+int calculateMemoryNeeded(const vector<OrderItem>& items);
 
-// Function to load orders (processes)
-vector<Process> loadOrders(const string &filename,
-                           const vector<MenuItem> &menu,
-                           const string &openTime);
+vector<Process> loadOrders(const string& filename, const vector<MenuItem>& menu, const string& openTime);
 
 #endif
