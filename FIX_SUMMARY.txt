@@ -1,0 +1,20 @@
+Fix Summary for So Phở So Good MiniOS Simulator
+
+Main problems fixed:
+1. Added BLOCKED_RESOURCE state.
+2. Split resource blocking from memory blocking.
+3. Added a second explicit shared resource: PaymentTerminal.
+4. Kept Stove as the CPU/kitchen execution resource.
+5. Fixed Round Robin so it no longer hangs.
+6. Prevented repeated memory allocation for the same process.
+7. Added clearer logs for resource acquire/block/release and memory allocation/block/release.
+8. Updated README.md to explain the actual implementation.
+
+Tested compile command:
+g++ -std=c++17 main.cpp input.cpp logger.cpp memory.cpp resource.cpp scheduler.cpp simulation.cpp -o sim
+
+Tested run mode:
+1 = run all policies sequentially
+
+Result:
+FCFS, SJF, and RR all finish without crashing or infinite looping.

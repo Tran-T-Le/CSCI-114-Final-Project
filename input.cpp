@@ -34,22 +34,22 @@ vector<MenuItem> loadMenu(string filename)
 // 2. Calculate burst time
 // ======================
 // Functions to convert time to global time
-int convertToMinutes(const string &timeStr)
+int convertToMinutes(const string& timeStr)
 {
     int hour = stoi(timeStr.substr(0, 2));
     int minute = stoi(timeStr.substr(3, 2));
 
     return hour * 60 + minute;
 }
-int convertToGlobalTime(const string &realTime, const string &openTime)
+int convertToGlobalTime(const string& realTime, const string& openTime)
 {
     return convertToMinutes(realTime) - convertToMinutes(openTime);
 }
 
 // Fumctions to calculate burst time
-int getCookTime(const string &itemName, const vector<MenuItem> &menu)
+int getCookTime(const string& itemName, const vector<MenuItem>& menu)
 {
-    for (const auto &item : menu)
+    for (const auto& item : menu)
     {
         if (item.name == itemName)
         {
@@ -59,12 +59,12 @@ int getCookTime(const string &itemName, const vector<MenuItem> &menu)
 
     return 0;
 }
-int calculateBurstTime(const vector<OrderItem> &items,
-                       const vector<MenuItem> &menu)
+int calculateBurstTime(const vector<OrderItem>& items,
+    const vector<MenuItem>& menu)
 {
     int total = 0;
 
-    for (const auto &item : items)
+    for (const auto& item : items)
     {
         int cookTime = getCookTime(item.name, menu);
 
@@ -77,11 +77,11 @@ int calculateBurstTime(const vector<OrderItem> &items,
 // ======================
 // 3. Calculate memory needed
 // ======================
-int calculateMemoryNeeded(const vector<OrderItem> &items)
+int calculateMemoryNeeded(const vector<OrderItem>& items)
 {
     int totalQuantity = 0;
 
-    for (const auto &item : items)
+    for (const auto& item : items)
     {
         totalQuantity += item.quantity;
     }
@@ -91,7 +91,7 @@ int calculateMemoryNeeded(const vector<OrderItem> &items)
 // ======================
 // 4. Load ORDERS
 // ======================
-vector<Process> loadOrders(const string &filename, const vector<MenuItem> &menu, const string &openTime)
+vector<Process> loadOrders(const string& filename, const vector<MenuItem>& menu, const string& openTime)
 {
     vector<Process> processes;
     ifstream fin(filename);
@@ -127,10 +127,10 @@ vector<Process> loadOrders(const string &filename, const vector<MenuItem> &menu,
 }
 void printProcesses(vector<Process> processes)
 {
-    for (const auto p : processes)
+    for (const auto& p : processes)
     {
         cout << "P" << p.pid << ": arrival=" << p.arrivalTime
-             << " burst=" << p.burstTime
-             << " memory=" << p.memoryNeeded << endl;
+            << " burst=" << p.burstTime
+            << " memory=" << p.memoryNeeded << endl;
     }
 }

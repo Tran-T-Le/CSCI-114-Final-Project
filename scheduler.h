@@ -13,6 +13,6 @@ enum SchedulingPolicy
     RR
 };
 
-Process *selectProcess(vector<Process *> &ready, SchedulingPolicy policy);
+Process* selectProcess(vector<Process*>& ready, SchedulingPolicy policy);
 
 #endif
