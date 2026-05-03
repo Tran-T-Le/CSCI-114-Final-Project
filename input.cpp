@@ -59,6 +59,7 @@ int getCookTime(const string& itemName, const vector<MenuItem>& menu)
 
     return 0;
 }
+
 int calculateBurstTime(const vector<OrderItem>& items,
     const vector<MenuItem>& menu)
 {

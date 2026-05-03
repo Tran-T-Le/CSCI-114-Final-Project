@@ -17,7 +17,7 @@ Process* selectProcess(vector<Process*>& ready, SchedulingPolicy policy)
     if (policy == SJF)
     {
         int idx = 0;
-        for (size_t i = 1; i < ready.size(); i++)
+        for (int i = 1; i < ready.size(); i++)
         {
             if (ready[i]->remainingTime < ready[idx]->remainingTime)
             {
