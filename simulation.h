@@ -1,4 +1,4 @@
-#ifndef SIMULATION_H  // [CHANGE 2] added missing include guard
+#ifndef SIMULATION_H
 #define SIMULATION_H
 
 #include <iostream>
@@ -25,38 +25,53 @@ class Simulator
 {
 private:
     vector<Process> processes;
-    vector<Process*> ready;
+    vector<Process *> ready;
+    vector<Process *> paidQueue;
 
-    vector<Process*> blockedMemory;
-    vector<Process*> blockedStove;
-    vector<Process*> blockedPayment;
+    vector<Process *> blockedMemory;
+    vector<Process *> blockedStove;
+    vector<Process *> blockedPayment;
 
-    Process* running;
+    Process *running;
 
-    ResourceManager CPUStove;   
-    ResourceManager PaymentTerminal;    
+    vector<ResourceManager> stoves;
+
+    ResourceManager PaymentTerminal;
 
     Logger logger;
     MemoryManager mem;
     SchedulingPolicy policy;
+
     int quantum;
     int currentTime;
     int finishedCount;
     int quantumCounter;
 
+    int paymentTimeLeft;
+    int paymentStartTime;
+    static const int PAYMENT_TIME = 2;
+
     vector<GanttEntry> gantt;
 
     void Systemstate();
 
+    Process *findProcessByPid(int pid);
+    bool hasStove(int pid) const;
+    bool acquireStove(Process *p);
+    void releaseStove(int pid);
+
 public:
-    Simulator(const vector<Process>& processList,
-        SchedulingPolicy schedulingPolicy, int timeQuantum, int memorySize, string logfile);
+    Simulator(const vector<Process> &processList,
+              SchedulingPolicy schedulingPolicy,
+              int timeQuantum,
+              int memorySize,
+              string logfile);
 
     string policyToString(SchedulingPolicy p);
-    string formatQueue(const vector<Process*>& q);
+    string formatQueue(const vector<Process *> &q);
 
-    void printGanttPerProcess() const;
     void run();
+    void printGanttPerProcess() const;
     void exportGantttoCSV(string filename);
 };
 

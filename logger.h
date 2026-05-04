@@ -11,11 +11,11 @@ private:
     ofstream file;
 
 public:
-    Logger(const string& filename);
+    Logger(const string &filename);
     ~Logger();
 
     void log(int time, int pid,
-        string order, string state, string resource, int memory, string queue);
+             string order, string state, string resource, int memory, string queue);
 };
 
 #endif
