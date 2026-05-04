@@ -6,7 +6,7 @@ Logger::Logger(const string &filename)
 
     if (file.is_open())
     {
-        file << "time,pid,order,state,resource,memory_used,ready_queue\n";
+        file << "Time,PID,Event,State,Resource,Memory_Used,Ready_Queue\n";
     }
 }
 
@@ -16,10 +16,10 @@ Logger::~Logger()
         file.close();
 }
 
-void Logger::log(int time, int pid, string order, string state, string resource, int memory, string queue)
+void Logger::log(int time, int pid, string event, string state, string resource, int memory, string queue)
 {
     if (!file.is_open())
         return;
 
-    file << time << "," << pid << "," << order << "," << state << "," << resource << "," << memory << "," << queue << " " << endl;
+    file << time << "," << pid << "," << event << "," << state << "," << resource << "," << memory << "," << queue << " " << endl;
 }
