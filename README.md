@@ -470,34 +470,3 @@ TERMINATED
 | Observable evidence | Console output and CSV logs show scheduling, blocking, state transitions, memory allocation, and resource release. |
 | Architecture/code organization | Separate files for input, scheduler, memory, resource, simulation, and logging. |
 
----
-
-## Important Fixes Made
-
-The fixed version improves the original project in these ways:
-
-1. Added `BLOCKED_RESOURCE` as a separate process state.
-2. Separated resource blocking from memory blocking.
-3. Added a second shared resource: `PaymentTerminal`.
-4. Kept `Stove` as the CPU/kitchen shared resource.
-5. Fixed Round Robin so it no longer loops forever.
-6. Prevented processes from being reallocated memory multiple times.
-7. Added cleaner resource acquire/release behavior.
-8. Added clearer console output and CSV log messages.
-9. Updated the README to match the actual code.
-
----
-
-## Limitations
-
-This project is still a simulation, not a real operating system. It does not use real process creation with `fork()` or `exec()`. It also does not use real threads or actual OS-level locks. The processes are C++ objects, and the scheduler loop manually advances simulated time.
-
-This is acceptable for the assignment because the project is meant to demonstrate OS concepts in user space.
-
----
-
-## Suggested Presentation Explanation
-
-A simple way to explain the project during the demo:
-
-> Our project simulates a restaurant as a mini operating system. Each customer order is a process. Before an order can run, it must finish payment using the shared PaymentTerminal and receive memory from the First-Fit memory manager. Once it is ready, the scheduler chooses which order gets kitchen CPU time. We implemented FCFS, SJF, and Round Robin. If memory is full or a resource is busy, the process blocks. When a process finishes, it releases memory and resources, allowing blocked processes to continue. The console output and CSV logs prove the scheduling decisions, blocking events, memory allocation, and state transitions.
