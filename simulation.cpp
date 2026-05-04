@@ -159,7 +159,7 @@ void Simulator::run()
                     cout << "[t=" << currentTime << "] P" << p->pid
                          << " PAYMENT_DONE" << endl;
                     logger.log(currentTime, p->pid, "PAYING", "PAYING",
-                               "PaymentTerminal", mem.getusedmemory(), formatQueue(blockedPayment));
+                               "PaymentTerminal", mem.getusedmemory(), formatQueue(ready));
 
                     PaymentTerminal.release();
                     paymentTimeLeft = 0;
@@ -195,7 +195,7 @@ void Simulator::run()
             logger.log(currentTime, p->pid, "START_PAYMENT", "PAYING",
                        "PaymentTerminal", mem.getusedmemory(), formatQueue(ready));
         }
-        // 4. Paid queue -> Memory
+        // 3. Paid queue -> Memory allocation -> Ready/Blocked
         {
             // We need to separate those that can be allocated memory from those that can't
             vector<Process *> stillPaid;
@@ -228,7 +228,7 @@ void Simulator::run()
             // Update paidQueue to only contain those still waiting for memory
             paidQueue = stillPaid;
         }
-        // 3. Handle new arrivals
+        // 4. Handle new arrivals
         for (auto &p : processes)
         {
             if (p.arrivalTime != currentTime || p.state != NEW)
@@ -357,7 +357,7 @@ void Simulator::run()
             cout << "[t=" << currentTime << "] P" << running->pid
                  << " RUN" << "| remaining burst time: " << running->remainingTime << endl;
             logger.log(currentTime, running->pid, "RUN", "RUNNING",
-                       "-", running->memoryNeeded, formatQueue(ready));
+                       "-", mem.getusedmemory(), formatQueue(ready));
 
             if (gantt.empty() || gantt.back().pid != running->pid)
                 gantt.push_back({running->pid, currentTime, currentTime + 1});
@@ -374,7 +374,7 @@ void Simulator::run()
                 cout << "[t=" << currentTime << "] P" << running->pid
                      << " FINISH" << endl;
                 logger.log(currentTime, running->pid, "FINISH", "TERMINATED",
-                           "-", running->memoryNeeded, formatQueue(ready));
+                           "-", mem.getusedmemory(), formatQueue(ready));
 
                 running = nullptr;
                 quantumCounter = 0;
@@ -388,7 +388,7 @@ void Simulator::run()
                 cout << "[t=" << currentTime << "] P" << running->pid
                      << " TIME_SLICE -> READY" << endl;
                 logger.log(currentTime, running->pid, "TIME_SLICE", "READY",
-                           "-", running->memoryNeeded, formatQueue(ready));
+                           "-", mem.getusedmemory(), formatQueue(ready));
                 running = nullptr;
                 quantumCounter = 0;
             }
