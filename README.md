@@ -18,8 +18,8 @@
 ## Comepile instruction
 Open Powershell or terminal in the project's folder location:
 
-Compile code: g++ main.cpp input.cpp memory.cpp resource.cpp scheduler.cpp simulation.cpp logger.cpp -o sim
-Then: .\sim.exe
+- Compile code: g++ main.cpp input.cpp memory.cpp resource.cpp scheduler.cpp simulation.cpp logger.cpp -o sim
+- Then: .\sim.exe
 
 
 ## Project Overview
