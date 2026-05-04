@@ -6,7 +6,7 @@ Logger::Logger(const string &filename)
 
     if (file.is_open())
     {
-        file << "time,pid,event,state,resource,memory_used,ready_queue\n";
+        file << "Time,PID,Event,State,Resource,Memory_Used,Ready_Queue\n";
     }
 }
 
