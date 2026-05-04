@@ -15,7 +15,7 @@ public:
     ~Logger();
 
     void log(int time, int pid,
-             string order, string state, string resource, int memory, string queue);
+             string event, string state, string resource, int memory, string queue);
 };
 
 #endif
