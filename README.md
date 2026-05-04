@@ -47,11 +47,9 @@ It will display the following:
   - termination events
 
 ---
-## File list
+# File list
 
-===============
-Header files
-===============
+## Header files
 - input.h
 - logger.h
 - memory.h
@@ -61,9 +59,7 @@ Header files
 
 ---
 
-==============
-Cpp files
-==============
+## Cpp files
 - input.cpp
 - logger.cpp
 - memory.cpp
@@ -74,9 +70,7 @@ Cpp files
 
 ---
 
-===================
-Other project files
-===================
+## Other project files
 - description.txt
 - FIX_SUMMARY.txt
 - Readme.md
