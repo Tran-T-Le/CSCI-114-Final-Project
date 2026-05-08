@@ -16,8 +16,8 @@ private:
 public:
     ResourceManager(string n);
 
-    bool request(int pid); // trying to use resource
-    void release();        // free up resource
+    bool request(int pid); //trying to use resource
+    void release(); //frees up resource once done
 
     bool isBusy() const;
     int getHolder() const;
