@@ -5,8 +5,7 @@
 #include <string>
 using namespace std;
 
-class Logger
-{
+class Logger {
 private:
     ofstream file;
 
@@ -14,8 +13,7 @@ public:
     Logger(const string &filename);
     ~Logger();
 
-    void log(int time, int pid,
-             string event, string state, string resource, int memory, string queue);
+    void log(int time, int pid, string event, string state, string resource, int memory, string queue);
 };
 
 #endif
