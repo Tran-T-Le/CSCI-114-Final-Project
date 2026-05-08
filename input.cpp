@@ -110,6 +110,7 @@ vector<Process> loadOrders(const string& filename, const vector<MenuItem>& menu,
     fin.close();
     return processes;
 }
+
 void printProcesses(vector<Process> processes) {
     for (const auto& p : processes) {
         cout << "P" << p.pid << ": arrival=" << p.arrivalTime
