@@ -1,13 +1,11 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
-
 #include <vector>
 #include "input.h"
 
 using namespace std;
 
-enum SchedulingPolicy
-{
+enum SchedulingPolicy {
     FCFS,
     SJF,
     RR
