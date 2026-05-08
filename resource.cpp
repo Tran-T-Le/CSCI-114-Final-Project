@@ -45,8 +45,7 @@ string ResourceManager::getQueueString() const {
     queue<int> temp = waitingOrders;
     string s;
 
-    while (!temp.empty())
-    {
+    while (!temp.empty()) {
         s += "Order" + to_string(temp.front()) + " ";
         temp.pop();
     }
