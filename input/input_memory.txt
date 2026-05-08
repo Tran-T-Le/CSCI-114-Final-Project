@@ -1,0 +1,6 @@
+4
+101 08:00 1 Pho 2
+102 08:00 1 BanhMi 1
+103 08:01 3 Pho 3 MilkTea 3 BanhMi 2
+104 08:02 3 Pho 3 MilkTea 3 BanhMi 2
+105 08:12 2 Pho 1 MilkTea 1

@@ -1,7 +1,0 @@
-6
-201 08:00 3 Pho 2 BunBo 1 MilkTea 1
-202 08:00 2 BanhMi 2 SpringRoll 2
-203 08:01 2 Pho 1 BunBo 2
-204 08:02 1 Eggroll 2
-205 08:03 2 Coffee 1 MangoSmoothie 2
-206 08:04 1 Pancit 2

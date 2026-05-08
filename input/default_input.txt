@@ -1,0 +1,9 @@
+5
+101 08:00 1 Pho 3
+102 08:03 1 BanhMi 3
+103 08:06 1 MilkTea 2
+104 08:09 1 Pho 1
+105 08:12 1 BanhMi 2
+
+PID, real-time, numbers of items, (name and quantity of each item)
+//Improve: use csv file
