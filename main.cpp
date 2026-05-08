@@ -4,8 +4,7 @@
 
 using namespace std;
 
-int main()
-{
+int main() {
     string openTime = "08:00";
     auto menu = loadMenu("menu.txt");
     int memorySize = 1024;
@@ -17,8 +16,7 @@ int main()
     int mode;
     cin >> mode;
 
-    if (mode == 1)
-    {
+    if (mode == 1) {
         cout << "\n========== FCFS ==========\n";
         vector<Process> p1 = loadOrders("input.txt", menu, openTime);
         Simulator sim1(p1, FCFS, 0, memorySize, "fcfs_log.csv");
@@ -37,14 +35,12 @@ int main()
         sim3.run();
         sim3.exportGantttoCSV("gantt_rr.csv");
     }
-    else if (mode == 2)
-    {
+    else if (mode == 2) {
         cout << "Select policy: 1=FCFS  2=SJF  3=RR : ";
         int choice; cin >> choice;
 
         int quantum = 0;
-        if (choice == 3)
-        {
+        if (choice == 3) {
             cout << "Enter RR time quantum: ";
             cin >> quantum;
         }
@@ -57,21 +53,20 @@ int main()
         sim.exportGantttoCSV("gantt.csv");
     }
 
-    else if (mode == 3)
-    {
+    else if (mode == 3) {
         cout << "Select policy: 1=FCFS  2=SJF  3=RR : ";
         int choice; cin >> choice;
 
         int quantum = 0;
-        if (choice == 3)
-        {
+        
+        if (choice == 3) {
             cout << "Enter RR time quantum: ";
             cin >> quantum;
         }
 
         int stressMem = 600;
         cout << "\n[STRESS TEST] Memory limited to " << stressMem
-            << " units — late arrivals will be BLOCKED_MEMORY until space frees.\n\n";
+            << " units â€” late arrivals will be BLOCKED_MEMORY until space frees.\n\n";
 
         vector<Process> processes = loadOrders("input_stress.txt", menu, openTime);
         Simulator sim(processes,
@@ -80,8 +75,7 @@ int main()
         sim.run();
         sim.exportGantttoCSV("gantt_stress.csv");
     }
-    else
-    {
+    else {
         cout << "Invalid choice.\n";
         return 1;
     }
