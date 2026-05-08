@@ -1,15 +1,15 @@
 #include "simulation.h"
 
-void Simulator::Systemstate()
-{
-    cout << endl
-         << "---- SYSTEM STATE ----" << endl;
+void Simulator::Systemstate() {
+    cout << endl << "---- SYSTEM STATE ----" << endl;
 
     cout << "Running: ";
-    if (running)
+    if (running) {
         cout << "P" << running->pid << endl;
-    else
+    }
+    else {
         cout << "NONE" << endl;
+    }
 
     cout << "Ready Queue: " << formatQueue(ready) << endl;
     cout << "Blocked (Memory): " << formatQueue(blockedMemory) << endl;
@@ -17,7 +17,6 @@ void Simulator::Systemstate()
     cout << "Blocked (Payment): " << formatQueue(blockedPayment) << endl;
 
     cout << "---------------------" << endl;
-    ;
 }
 
 Simulator::Simulator(const vector<Process> &processList,
@@ -44,59 +43,49 @@ Simulator::Simulator(const vector<Process> &processList,
     stoves.push_back(ResourceManager("Stove2"));
 }
 
-Process *Simulator::findProcessByPid(int pid)
-{
-    for (auto &p : processes)
-    {
-        if (p.pid == pid)
+Process *Simulator::findProcessByPid(int pid) {
+    for (auto &p : processes) {
+        if (p.pid == pid) {
             return &p;
+        }
     }
     return nullptr;
 }
 
-bool Simulator::hasStove(int pid) const
-{
-    for (const auto &stove : stoves)
-    {
-        if (stove.getHolder() == pid)
+bool Simulator::hasStove(int pid) const {
+    for (const auto &stove : stoves) {
+        if (stove.getHolder() == pid) {
             return true;
+        }
     }
     return false;
 }
 
-bool Simulator::acquireStove(Process *p)
-{
-    if (hasStove(p->pid))
+bool Simulator::acquireStove(Process *p) {
+    if (hasStove(p->pid)) {
         return true;
+    }
 
-    for (auto &stove : stoves)
-    {
-        if (!stove.isBusy())
-        {
+    for (auto &stove : stoves) {
+        if (!stove.isBusy()) {
             stove.request(p->pid);
             return true;
         }
     }
-
     return false;
 }
 
-void Simulator::releaseStove(int pid)
-{
-    for (auto &stove : stoves)
-    {
-        if (stove.getHolder() == pid)
-        {
+void Simulator::releaseStove(int pid) {
+    for (auto &stove : stoves) {
+        if (stove.getHolder() == pid) {
             stove.release();
             return;
         }
     }
 }
 
-string Simulator::policyToString(SchedulingPolicy p)
-{
-    switch (p)
-    {
+string Simulator::policyToString(SchedulingPolicy p) {
+    switch (p) {
     case FCFS:
         return "FCFS";
     case SJF:
@@ -108,20 +97,21 @@ string Simulator::policyToString(SchedulingPolicy p)
     }
 }
 
-string Simulator::formatQueue(const vector<Process *> &q)
-{
-    if (q.empty())
+string Simulator::formatQueue(const vector<Process *> &q) {
+    if (q.empty()) {
         return "EMPTY";
+    }
     string s;
-    for (auto p : q)
+    for (auto p : q) {
         s += "P" + to_string(p->pid) + " ";
-    if (!s.empty() && s.back() == ' ')
+    }
+    if (!s.empty() && s.back() == ' ') {
         s.pop_back();
+    }
     return s;
 }
 
-void Simulator::run()
-{
+void Simulator::run() {
     blockedMemory.clear();
     blockedStove.clear();
     blockedPayment.clear();
@@ -137,25 +127,22 @@ void Simulator::run()
     paymentTimeLeft = 0;
     paymentStartTime = -1;
 
-    while (finishedCount < (int)processes.size())
-    {
+    while (finishedCount < (int)processes.size()) {
         cout << "\n========== Time " << currentTime << " ==========\n";
 
         // 1. Update current payment
-        if (PaymentTerminal.isBusy())
-        {
+        if (PaymentTerminal.isBusy()) {
             // Get the process currently paying
             int pid = PaymentTerminal.getHolder();
             Process *p = findProcessByPid(pid);
 
-            if (p != nullptr)
-            {
+            if (p != nullptr) {
                 // Decrease payment time
-                if (currentTime > paymentStartTime)
+                if (currentTime > paymentStartTime) {
                     paymentTimeLeft--;
+                }
                 // Check if payment is done, if so, release terminal and move to paid queue
-                if (paymentTimeLeft == 0)
-                {
+                if (paymentTimeLeft == 0) {
                     cout << "[t=" << currentTime << "] P" << p->pid
                          << " PAYMENT_DONE" << endl;
                     logger.log(currentTime, p->pid, "PAYING", "PAYING",
@@ -167,8 +154,8 @@ void Simulator::run()
 
                     paidQueue.push_back(p);
                 }
-                else
-                {
+                    
+                else {
                     cout << "[t=" << currentTime << "] P" << p->pid
                          << " PAYING" << endl;
                     logger.log(currentTime, p->pid, "PAYING", "PAYING",
@@ -178,8 +165,7 @@ void Simulator::run()
         }
 
         // 2. Start old blocked payment first to add to paid queue before handling new arrivals
-        if (!PaymentTerminal.isBusy() && !blockedPayment.empty())
-        {
+        if (!PaymentTerminal.isBusy() && !blockedPayment.empty()) {
             Process *p = blockedPayment.front();
             blockedPayment.erase(blockedPayment.begin());
 
@@ -200,12 +186,10 @@ void Simulator::run()
             // We need to separate those that can be allocated memory from those that can't
             vector<Process *> stillPaid;
 
-            for (auto *p : paidQueue)
-            {
+            for (auto *p : paidQueue) {
                 int slot = mem.allocate(p->pid, p->memoryNeeded);
 
-                if (slot != -1)
-                {
+                if (slot != -1) {
                     p->state = READY;
                     ready.push_back(p);
 
@@ -214,8 +198,8 @@ void Simulator::run()
                     logger.log(currentTime, p->pid, "MEMORY_ALLOC", "READY",
                                "-", mem.getusedmemory(), formatQueue(ready));
                 }
-                else
-                {
+                    
+                else {
                     p->state = BLOCKED_MEMORY;
                     blockedMemory.push_back(p);
 
@@ -229,10 +213,10 @@ void Simulator::run()
             paidQueue = stillPaid;
         }
         // 4. Handle new arrivals
-        for (auto &p : processes)
-        {
-            if (p.arrivalTime != currentTime || p.state != NEW)
+        for (auto &p : processes) {
+            if (p.arrivalTime != currentTime || p.state != NEW) {
                 continue;
+            }
 
             cout << "[t=" << currentTime << "] P" << p.pid
                  << " ARRIVE" << endl;
@@ -241,8 +225,7 @@ void Simulator::run()
 
             p.state = BLOCKED_RESOURCE;
 
-            if (!PaymentTerminal.isBusy())
-            {
+            if (!PaymentTerminal.isBusy()) {
                 PaymentTerminal.request(p.pid);
                 paymentTimeLeft = PAYMENT_TIME;
                 paymentStartTime = currentTime;
@@ -252,8 +235,8 @@ void Simulator::run()
                 logger.log(currentTime, p.pid, "START_PAYMENT", "PAYING",
                            "PaymentTerminal", mem.getusedmemory(), formatQueue(ready));
             }
-            else
-            {
+                
+            else {
                 blockedPayment.push_back(&p);
 
                 cout << "[t=" << currentTime << "] P" << p.pid
@@ -267,12 +250,10 @@ void Simulator::run()
         {
             vector<Process *> stillBlocked;
 
-            for (auto *p : blockedMemory)
-            {
+            for (auto *p : blockedMemory) {
                 int slot = mem.allocate(p->pid, p->memoryNeeded);
 
-                if (slot != -1)
-                {
+                if (slot != -1) {
                     p->state = READY;
                     ready.push_back(p);
 
@@ -281,8 +262,8 @@ void Simulator::run()
                     logger.log(currentTime, p->pid, "MEMORY_RETRY", "READY",
                                "-", mem.getusedmemory(), formatQueue(ready));
                 }
-                else
-                {
+                    
+                else {
                     stillBlocked.push_back(p);
                 }
             }
@@ -294,10 +275,8 @@ void Simulator::run()
         {
             vector<Process *> stillBlocked;
 
-            for (auto *p : blockedStove)
-            {
-                if (hasStove(p->pid) || acquireStove(p))
-                {
+            for (auto *p : blockedStove) {
+                if (hasStove(p->pid) || acquireStove(p)) {
                     p->state = READY;
                     ready.push_back(p);
 
@@ -306,8 +285,8 @@ void Simulator::run()
                     logger.log(currentTime, p->pid, "STOVE_RETRY_OK", "READY",
                                "-", mem.getusedmemory(), formatQueue(ready));
                 }
-                else
-                {
+                    
+                else {
                     stillBlocked.push_back(p);
                 }
             }
@@ -316,14 +295,11 @@ void Simulator::run()
         }
 
         // 7. Schedule from ready queue
-        if (running == nullptr)
-        {
+        if (running == nullptr) {
             Process *p = selectProcess(ready, policy);
 
-            if (p != nullptr)
-            {
-                if (hasStove(p->pid) || acquireStove(p))
-                {
+            if (p != nullptr) {
+                if (hasStove(p->pid) || acquireStove(p)) {
                     p->state = RUNNING;
                     running = p;
                     quantumCounter = 0;
@@ -333,8 +309,8 @@ void Simulator::run()
                     logger.log(currentTime, p->pid, "SCHEDULE", "RUNNING",
                                "-", mem.getusedmemory(), formatQueue(ready));
                 }
-                else
-                {
+                    
+                else {
                     p->state = BLOCKED_RESOURCE;
                     blockedStove.push_back(p);
 
@@ -347,25 +323,26 @@ void Simulator::run()
         }
 
         // 8. Run current process
-        if (running != nullptr)
-        {
+        if (running != nullptr) {
             running->remainingTime--;
 
-            if (policy == RR)
+            if (policy == RR) {
                 quantumCounter++;
+            }
 
             cout << "[t=" << currentTime << "] P" << running->pid
                  << " RUN" << "| remaining burst time: " << running->remainingTime << endl;
             logger.log(currentTime, running->pid, "RUN", "RUNNING",
                        "-", mem.getusedmemory(), formatQueue(ready));
 
-            if (gantt.empty() || gantt.back().pid != running->pid)
+            if (gantt.empty() || gantt.back().pid != running->pid) {
                 gantt.push_back({running->pid, currentTime, currentTime + 1});
-            else
+            }
+            else {
                 gantt.back().end++;
+            }
 
-            if (running->remainingTime == 0)
-            {
+            if (running->remainingTime == 0) {
                 running->state = TERMINATED;
 
                 releaseStove(running->pid);
@@ -380,8 +357,8 @@ void Simulator::run()
                 quantumCounter = 0;
                 finishedCount++;
             }
-            else if (policy == RR && quantumCounter >= quantum)
-            {
+            
+            else if (policy == RR && quantumCounter >= quantum) {
                 running->state = READY;
                 ready.push_back(running);
 
@@ -393,8 +370,8 @@ void Simulator::run()
                 quantumCounter = 0;
             }
         }
-        else
-        {
+            
+        else {
             cout << "[t=" << currentTime << "] CPU IDLE" << endl;
         }
 
@@ -407,12 +384,10 @@ void Simulator::run()
     printGanttPerProcess();
 }
 
-void Simulator::printGanttPerProcess() const
-{
+void Simulator::printGanttPerProcess() const {
     cout << "\n========== FINAL GANTT ==========\n";
 
-    if (gantt.empty())
-    {
+    if (gantt.empty()) {
         cout << "No execution history.\n";
         return;
     }
@@ -427,17 +402,16 @@ void Simulator::printGanttPerProcess() const
         for (int t = g.start; t < g.end; t++)
             timeline[g.pid][t] = 'X';
 
-    for (const auto &p : processes)
-    {
+    for (const auto &p : processes) {
         cout << "P" << p.pid << ": ";
-        for (int t = 0; t < maxTime; t++)
+        for (int t = 0; t < maxTime; t++) {
             cout << timeline[p.pid][t] << " ";
+        }
         cout << "\n";
     }
 }
 
-void Simulator::exportGantttoCSV(string filename)
-{
+void Simulator::exportGantttoCSV(string filename) {
     ofstream file(filename);
     file << "pid,start,end\n";
 
