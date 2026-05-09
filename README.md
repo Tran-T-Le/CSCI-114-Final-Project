@@ -21,8 +21,10 @@
 
 Open Powershell or terminal in the project's folder location:
 
-- Compile code: g++ main.cpp input.cpp memory.cpp resource.cpp scheduler.cpp simulation.cpp logger.cpp -o sim
-- Then: .\sim.exe
+```bash
+g++ src/*.cpp -Iinclude -o sim
+.\sim.exe
+```
 
 ## Project Overview
 

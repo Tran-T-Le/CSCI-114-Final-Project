@@ -11,10 +11,8 @@ Main problems fixed:
 8. Updated README.md to explain the actual implementation.
 
 Tested compile command:
-g++ -std=c++17 main.cpp input.cpp logger.cpp memory.cpp resource.cpp scheduler.cpp simulation.cpp -o sim
+g++ src/*.cpp -Iinclude -o sim
 
-Tested run mode:
-1 = run all policies sequentially
 
 Result:
 FCFS, SJF, and RR all finish without crashing or infinite looping.
