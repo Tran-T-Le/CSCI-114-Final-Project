@@ -1,661 +1,614 @@
-Choose run mode: 
-1 = Run all policies sequentially (FCFS, SJF, RR)
-2 = Run a single policy
+Choose test case:
+  1 = Default input.txt
+  2 = Blocked Payment test
+  3 = Blocked Memory test
+  4 = Blocked Stove test(only applicable for Round Robin)
+Select test case: 4
 
-========== FCFS Simulation ==========
+Choose scheduling policy:
+  1 = FCFS
+  2 = SJF
+  3 = Round Robin
+Select policy: 3
+Enter RR time quantum: 3
 
-Policy: FCFS
-
-========== Time 0 ==========
-[t=0] P101 arrived at restaurant kiosk.
-[t=0] P101 acquired PaymentTerminal.
-[t=0] CPU IDLE.
-[t=0] P101 released PaymentTerminal.
-[t=0] P101 allocated 400 memory units using First-Fit.
-[t=0] Memory: [0..399 P101] [400..1023 FREE] 
-
-========== Time 1 ==========
-[t=1] Scheduler selected P101 using FCFS.
-[t=1] P101 RUNNING, remaining time = 9.
-[t=1] Memory: [0..399 P101] [400..1023 FREE] 
-
-========== Time 2 ==========
-[t=2] P102 arrived at restaurant kiosk.
-[t=2] P103 arrived at restaurant kiosk.
-[t=2] P103 blocked: PaymentTerminal is busy.
-[t=2] P102 acquired PaymentTerminal.
-[t=2] P101 RUNNING, remaining time = 8.
-[t=2] P102 released PaymentTerminal.
-[t=2] P102 allocated 200 memory units using First-Fit.
-[t=2] P103 acquired PaymentTerminal.
-[t=2] Memory: [0..399 P101] [400..599 P102] [600..1023 FREE] 
-
-========== Time 3 ==========
-[t=3] P101 RUNNING, remaining time = 7.
-[t=3] P103 released PaymentTerminal.
-[t=3] P103 allocated 200 memory units using First-Fit.
-[t=3] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 4 ==========
-[t=4] P101 RUNNING, remaining time = 6.
-[t=4] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 5 ==========
-[t=5] P101 RUNNING, remaining time = 5.
-[t=5] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 6 ==========
-[t=6] P101 RUNNING, remaining time = 4.
-[t=6] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 7 ==========
-[t=7] P101 RUNNING, remaining time = 3.
-[t=7] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 8 ==========
-[t=8] P101 RUNNING, remaining time = 2.
-[t=8] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 9 ==========
-[t=9] P101 RUNNING, remaining time = 1.
-[t=9] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 10 ==========
-[t=10] P101 RUNNING, remaining time = 0.
-[t=10] P101 TERMINATED. Memory and Stove released.
-[t=10] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 11 ==========
-[t=11] Scheduler selected P102 using FCFS.
-[t=11] P102 RUNNING, remaining time = 3.
-[t=11] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 12 ==========
-[t=12] P102 RUNNING, remaining time = 2.
-[t=12] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 13 ==========
-[t=13] P102 RUNNING, remaining time = 1.
-[t=13] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 14 ==========
-[t=14] P102 RUNNING, remaining time = 0.
-[t=14] P102 TERMINATED. Memory and Stove released.
-[t=14] Memory: [0..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 15 ==========
-[t=15] P104 arrived at restaurant kiosk.
-[t=15] P104 acquired PaymentTerminal.
-[t=15] Scheduler selected P103 using FCFS.
-[t=15] P103 RUNNING, remaining time = 4.
-[t=15] P104 released PaymentTerminal.
-[t=15] P104 allocated 500 memory units using First-Fit.
-[t=15] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 16 ==========
-[t=16] P103 RUNNING, remaining time = 3.
-[t=16] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 17 ==========
-[t=17] P103 RUNNING, remaining time = 2.
-[t=17] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 18 ==========
-[t=18] P103 RUNNING, remaining time = 1.
-[t=18] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 19 ==========
-[t=19] P103 RUNNING, remaining time = 0.
-[t=19] P103 TERMINATED. Memory and Stove released.
-[t=19] Memory: [0..499 P104] [500..1023 FREE] 
-
-========== Time 20 ==========
-[t=20] P105 arrived at restaurant kiosk.
-[t=20] P105 acquired PaymentTerminal.
-[t=20] Scheduler selected P104 using FCFS.
-[t=20] P104 RUNNING, remaining time = 9.
-[t=20] P105 released PaymentTerminal.
-[t=20] P105 allocated 500 memory units using First-Fit.
-[t=20] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 21 ==========
-[t=21] P104 RUNNING, remaining time = 8.
-[t=21] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 22 ==========
-[t=22] P104 RUNNING, remaining time = 7.
-[t=22] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 23 ==========
-[t=23] P104 RUNNING, remaining time = 6.
-[t=23] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 24 ==========
-[t=24] P104 RUNNING, remaining time = 5.
-[t=24] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 25 ==========
-[t=25] P104 RUNNING, remaining time = 4.
-[t=25] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 26 ==========
-[t=26] P104 RUNNING, remaining time = 3.
-[t=26] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 27 ==========
-[t=27] P104 RUNNING, remaining time = 2.
-[t=27] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 28 ==========
-[t=28] P104 RUNNING, remaining time = 1.
-[t=28] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 29 ==========
-[t=29] P104 RUNNING, remaining time = 0.
-[t=29] P104 TERMINATED. Memory and Stove released.
-[t=29] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 30 ==========
-[t=30] Scheduler selected P105 using FCFS.
-[t=30] P105 RUNNING, remaining time = 11.
-[t=30] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 31 ==========
-[t=31] P105 RUNNING, remaining time = 10.
-[t=31] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 32 ==========
-[t=32] P105 RUNNING, remaining time = 9.
-[t=32] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 33 ==========
-[t=33] P105 RUNNING, remaining time = 8.
-[t=33] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 34 ==========
-[t=34] P105 RUNNING, remaining time = 7.
-[t=34] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 35 ==========
-[t=35] P105 RUNNING, remaining time = 6.
-[t=35] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 36 ==========
-[t=36] P105 RUNNING, remaining time = 5.
-[t=36] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 37 ==========
-[t=37] P105 RUNNING, remaining time = 4.
-[t=37] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 38 ==========
-[t=38] P105 RUNNING, remaining time = 3.
-[t=38] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 39 ==========
-[t=39] P105 RUNNING, remaining time = 2.
-[t=39] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 40 ==========
-[t=40] P105 RUNNING, remaining time = 1.
-[t=40] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
-
-========== Time 41 ==========
-[t=41] P105 RUNNING, remaining time = 0.
-[t=41] P105 TERMINATED. Memory and Stove released.
-[t=41] Memory: [0..1023 FREE] 
-
-========== FINAL GANTT CHART ==========
-Time:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 
-P101:  -  X  X  X  X  X  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P102:  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P103:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P104:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  - 
-P105:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  X  X  X  X  X  X  X 
-
-========== SJF Simulation ==========
-
-Policy: SJF
+Running simulation...
+Input file: input/input_stove.txt
+Policy: rr
+Quantum: 3
 
 ========== Time 0 ==========
-[t=0] P101 arrived at restaurant kiosk.
-[t=0] P101 acquired PaymentTerminal.
-[t=0] CPU IDLE.
-[t=0] P101 released PaymentTerminal.
-[t=0] P101 allocated 400 memory units using First-Fit.
-[t=0] Memory: [0..399 P101] [400..1023 FREE] 
+[t=0] P101 ARRIVE
+[t=0] P101 START PAYMENT -> ACQUIRE_PAYMENT
+[t=0] P102 ARRIVE
+[t=0] P102 WAIT_PAYMENT
+[t=0] P103 ARRIVE
+[t=0] P103 WAIT_PAYMENT
+[t=0] CPU IDLE
+[t=0] Memory: [0..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P102 P103
+---------------------
 
 ========== Time 1 ==========
-[t=1] Scheduler selected P101 using SJF.
-[t=1] P101 RUNNING, remaining time = 9.
-[t=1] Memory: [0..399 P101] [400..1023 FREE] 
+[t=1] P101 PAYING
+[t=1] P104 ARRIVE
+[t=1] P104 WAIT_PAYMENT
+[t=1] P105 ARRIVE
+[t=1] P105 WAIT_PAYMENT
+[t=1] CPU IDLE
+[t=1] Memory: [0..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P102 P103 P104 P105
+---------------------
 
 ========== Time 2 ==========
-[t=2] P102 arrived at restaurant kiosk.
-[t=2] P103 arrived at restaurant kiosk.
-[t=2] P103 blocked: PaymentTerminal is busy.
-[t=2] P102 acquired PaymentTerminal.
-[t=2] P101 RUNNING, remaining time = 8.
-[t=2] P102 released PaymentTerminal.
-[t=2] P102 allocated 200 memory units using First-Fit.
-[t=2] P103 acquired PaymentTerminal.
-[t=2] Memory: [0..399 P101] [400..599 P102] [600..1023 FREE] 
+[t=2] P101 PAYMENT_DONE -> RELEASE_PAYMENT
+[t=2] P102 START PAYMENT -> ACQUIRE_PAYMENT
+[t=2] P101 MEMORY_OK -> READY
+[t=2] P101 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 9
+[t=2] P101 RUN| remaining burst time: 8
+[t=2] Memory: [0..299 P101] [300..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P101
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P103 P104 P105
+---------------------
 
 ========== Time 3 ==========
-[t=3] P101 RUNNING, remaining time = 7.
-[t=3] P103 released PaymentTerminal.
-[t=3] P103 allocated 200 memory units using First-Fit.
-[t=3] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=3] P102 PAYING
+[t=3] P101 RUN| remaining burst time: 7
+[t=3] Memory: [0..299 P101] [300..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P101
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P103 P104 P105
+---------------------
 
 ========== Time 4 ==========
-[t=4] P101 RUNNING, remaining time = 6.
-[t=4] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=4] P102 PAYMENT_DONE -> RELEASE_PAYMENT
+[t=4] P103 START PAYMENT -> ACQUIRE_PAYMENT
+[t=4] P102 MEMORY_OK -> READY
+[t=4] P101 RUN| remaining burst time: 6
+[t=4] P101 TIME_SLICE -> READY
+[t=4] Memory: [0..299 P101] [300..599 P102] [600..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P102 P101
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P104 P105
+---------------------
 
 ========== Time 5 ==========
-[t=5] P101 RUNNING, remaining time = 5.
-[t=5] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=5] P103 PAYING
+[t=5] P102 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 9
+[t=5] P102 RUN| remaining burst time: 8
+[t=5] Memory: [0..299 P101] [300..599 P102] [600..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P102
+Ready Queue: P101
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P104 P105
+---------------------
 
 ========== Time 6 ==========
-[t=6] P101 RUNNING, remaining time = 4.
-[t=6] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=6] P103 PAYMENT_DONE -> RELEASE_PAYMENT
+[t=6] P104 START PAYMENT -> ACQUIRE_PAYMENT
+[t=6] P103 MEMORY_OK -> READY
+[t=6] P102 RUN| remaining burst time: 7
+[t=6] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P102
+Ready Queue: P101 P103
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P105
+---------------------
 
 ========== Time 7 ==========
-[t=7] P101 RUNNING, remaining time = 3.
-[t=7] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=7] P104 PAYING
+[t=7] P102 RUN| remaining burst time: 6
+[t=7] P102 TIME_SLICE -> READY
+[t=7] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P101 P103 P102
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): P105
+---------------------
 
 ========== Time 8 ==========
-[t=8] P101 RUNNING, remaining time = 2.
-[t=8] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=8] P104 PAYMENT_DONE -> RELEASE_PAYMENT
+[t=8] P105 START PAYMENT -> ACQUIRE_PAYMENT
+[t=8] P104memory needed: 200 MEMORY_FAIL ->  BLOCKED_MEMORY
+[t=8] P101 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 6
+[t=8] P101 RUN| remaining burst time: 5
+[t=8] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P101
+Ready Queue: P103 P102
+Blocked (Memory): P104
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 9 ==========
-[t=9] P101 RUNNING, remaining time = 1.
-[t=9] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=9] P105 PAYING
+[t=9] P101 RUN| remaining burst time: 4
+[t=9] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P101
+Ready Queue: P103 P102
+Blocked (Memory): P104
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 10 ==========
-[t=10] P101 RUNNING, remaining time = 0.
-[t=10] P101 TERMINATED. Memory and Stove released.
-[t=10] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=10] P105 PAYMENT_DONE -> RELEASE_PAYMENT
+[t=10] P105memory needed: 200 MEMORY_FAIL ->  BLOCKED_MEMORY
+[t=10] P101 RUN| remaining burst time: 3
+[t=10] P101 TIME_SLICE -> READY
+[t=10] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P103 P102 P101
+Blocked (Memory): P104 P105
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 11 ==========
-[t=11] Scheduler selected P102 using SJF.
-[t=11] P102 RUNNING, remaining time = 3.
-[t=11] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=11] P103 WAIT_STOVE
+[t=11] CPU IDLE
+[t=11] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P102 P101
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 12 ==========
-[t=12] P102 RUNNING, remaining time = 2.
-[t=12] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=12] P102 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 6
+[t=12] P102 RUN| remaining burst time: 5
+[t=12] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P102
+Ready Queue: P101
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 13 ==========
-[t=13] P102 RUNNING, remaining time = 1.
-[t=13] Memory: [0..399 FREE] [400..599 P102] [600..799 P103] [800..1023 FREE] 
+[t=13] P102 RUN| remaining burst time: 4
+[t=13] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P102
+Ready Queue: P101
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 14 ==========
-[t=14] P102 RUNNING, remaining time = 0.
-[t=14] P102 TERMINATED. Memory and Stove released.
-[t=14] Memory: [0..599 FREE] [600..799 P103] [800..1023 FREE] 
+[t=14] P102 RUN| remaining burst time: 3
+[t=14] P102 TIME_SLICE -> READY
+[t=14] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P101 P102
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 15 ==========
-[t=15] P104 arrived at restaurant kiosk.
-[t=15] P104 acquired PaymentTerminal.
-[t=15] Scheduler selected P103 using SJF.
-[t=15] P103 RUNNING, remaining time = 4.
-[t=15] P104 released PaymentTerminal.
-[t=15] P104 allocated 500 memory units using First-Fit.
-[t=15] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
+[t=15] P101 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 3
+[t=15] P101 RUN| remaining burst time: 2
+[t=15] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P101
+Ready Queue: P102
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 16 ==========
-[t=16] P103 RUNNING, remaining time = 3.
-[t=16] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
+[t=16] P101 RUN| remaining burst time: 1
+[t=16] Memory: [0..299 P101] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P101
+Ready Queue: P102
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 17 ==========
-[t=17] P103 RUNNING, remaining time = 2.
-[t=17] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
+[t=17] P101 RUN| remaining burst time: 0
+[t=17] P101 FINISH
+[t=17] Memory: [0..299 FREE] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P102
+Blocked (Memory): P104 P105
+Blocked (Stove): P103
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 18 ==========
-[t=18] P103 RUNNING, remaining time = 1.
-[t=18] Memory: [0..499 P104] [500..599 FREE] [600..799 P103] [800..1023 FREE] 
+[t=18] P103 STOVE_OK -> READY
+[t=18] P104 MEMORY_RETRY_OK -> READY
+[t=18] P102 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 3
+[t=18] P102 RUN| remaining burst time: 2
+[t=18] Memory: [0..199 P104] [200..299 FREE] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P102
+Ready Queue: P103 P104
+Blocked (Memory): P105
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 19 ==========
-[t=19] P103 RUNNING, remaining time = 0.
-[t=19] P103 TERMINATED. Memory and Stove released.
-[t=19] Memory: [0..499 P104] [500..1023 FREE] 
+[t=19] P102 RUN| remaining burst time: 1
+[t=19] Memory: [0..199 P104] [200..299 FREE] [300..599 P102] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P102
+Ready Queue: P103 P104
+Blocked (Memory): P105
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 20 ==========
-[t=20] P105 arrived at restaurant kiosk.
-[t=20] P105 acquired PaymentTerminal.
-[t=20] Scheduler selected P104 using SJF.
-[t=20] P104 RUNNING, remaining time = 9.
-[t=20] P105 released PaymentTerminal.
-[t=20] P105 allocated 500 memory units using First-Fit.
-[t=20] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=20] P102 RUN| remaining burst time: 0
+[t=20] P102 FINISH
+[t=20] Memory: [0..199 P104] [200..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P103 P104
+Blocked (Memory): P105
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 21 ==========
-[t=21] P104 RUNNING, remaining time = 8.
-[t=21] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=21] P105 MEMORY_RETRY_OK -> READY
+[t=21] P103 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 9
+[t=21] P103 RUN| remaining burst time: 8
+[t=21] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P103
+Ready Queue: P104 P105
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 22 ==========
-[t=22] P104 RUNNING, remaining time = 7.
-[t=22] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=22] P103 RUN| remaining burst time: 7
+[t=22] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P103
+Ready Queue: P104 P105
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 23 ==========
-[t=23] P104 RUNNING, remaining time = 6.
-[t=23] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=23] P103 RUN| remaining burst time: 6
+[t=23] P103 TIME_SLICE -> READY
+[t=23] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P104 P105 P103
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 24 ==========
-[t=24] P104 RUNNING, remaining time = 5.
-[t=24] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=24] P104 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 6
+[t=24] P104 RUN| remaining burst time: 5
+[t=24] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P104
+Ready Queue: P105 P103
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 25 ==========
-[t=25] P104 RUNNING, remaining time = 4.
-[t=25] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=25] P104 RUN| remaining burst time: 4
+[t=25] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P104
+Ready Queue: P105 P103
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 26 ==========
-[t=26] P104 RUNNING, remaining time = 3.
-[t=26] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=26] P104 RUN| remaining burst time: 3
+[t=26] P104 TIME_SLICE -> READY
+[t=26] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P105 P103 P104
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 27 ==========
-[t=27] P104 RUNNING, remaining time = 2.
-[t=27] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=27] P105 WAIT_STOVE
+[t=27] CPU IDLE
+[t=27] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P103 P104
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 28 ==========
-[t=28] P104 RUNNING, remaining time = 1.
-[t=28] Memory: [0..499 P104] [500..999 P105] [1000..1023 FREE] 
+[t=28] P103 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 6
+[t=28] P103 RUN| remaining burst time: 5
+[t=28] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P103
+Ready Queue: P104
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 29 ==========
-[t=29] P104 RUNNING, remaining time = 0.
-[t=29] P104 TERMINATED. Memory and Stove released.
-[t=29] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=29] P103 RUN| remaining burst time: 4
+[t=29] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P103
+Ready Queue: P104
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 30 ==========
-[t=30] Scheduler selected P105 using SJF.
-[t=30] P105 RUNNING, remaining time = 11.
-[t=30] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=30] P103 RUN| remaining burst time: 3
+[t=30] P103 TIME_SLICE -> READY
+[t=30] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P104 P103
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 31 ==========
-[t=31] P105 RUNNING, remaining time = 10.
-[t=31] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=31] P104 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 3
+[t=31] P104 RUN| remaining burst time: 2
+[t=31] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P104
+Ready Queue: P103
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 32 ==========
-[t=32] P105 RUNNING, remaining time = 9.
-[t=32] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=32] P104 RUN| remaining burst time: 1
+[t=32] Memory: [0..199 P104] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P104
+Ready Queue: P103
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 33 ==========
-[t=33] P105 RUNNING, remaining time = 8.
-[t=33] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=33] P104 RUN| remaining burst time: 0
+[t=33] P104 FINISH
+[t=33] Memory: [0..199 FREE] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P103
+Blocked (Memory): EMPTY
+Blocked (Stove): P105
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 34 ==========
-[t=34] P105 RUNNING, remaining time = 7.
-[t=34] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=34] P105 STOVE_OK -> READY
+[t=34] P103 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 3
+[t=34] P103 RUN| remaining burst time: 2
+[t=34] Memory: [0..199 FREE] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P103
+Ready Queue: P105
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 35 ==========
-[t=35] P105 RUNNING, remaining time = 6.
-[t=35] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=35] P103 RUN| remaining burst time: 1
+[t=35] Memory: [0..199 FREE] [200..399 P105] [400..599 FREE] [600..899 P103] [900..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P103
+Ready Queue: P105
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 36 ==========
-[t=36] P105 RUNNING, remaining time = 5.
-[t=36] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=36] P103 RUN| remaining burst time: 0
+[t=36] P103 FINISH
+[t=36] Memory: [0..199 FREE] [200..399 P105] [400..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P105
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 37 ==========
-[t=37] P105 RUNNING, remaining time = 4.
-[t=37] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=37] P105 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 6
+[t=37] P105 RUN| remaining burst time: 5
+[t=37] Memory: [0..199 FREE] [200..399 P105] [400..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P105
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 38 ==========
-[t=38] P105 RUNNING, remaining time = 3.
-[t=38] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=38] P105 RUN| remaining burst time: 4
+[t=38] Memory: [0..199 FREE] [200..399 P105] [400..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P105
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 39 ==========
-[t=39] P105 RUNNING, remaining time = 2.
-[t=39] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=39] P105 RUN| remaining burst time: 3
+[t=39] P105 TIME_SLICE -> READY
+[t=39] Memory: [0..199 FREE] [200..399 P105] [400..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: P105
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 40 ==========
-[t=40] P105 RUNNING, remaining time = 1.
-[t=40] Memory: [0..499 FREE] [500..999 P105] [1000..1023 FREE] 
+[t=40] P105 SCHEDULE using RR -> acquire stove and RUN| remaining burst time: 3
+[t=40] P105 RUN| remaining burst time: 2
+[t=40] Memory: [0..199 FREE] [200..399 P105] [400..1023 FREE] 
+
+---- SYSTEM STATE ----
+Running: P105
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
 ========== Time 41 ==========
-[t=41] P105 RUNNING, remaining time = 0.
-[t=41] P105 TERMINATED. Memory and Stove released.
-[t=41] Memory: [0..1023 FREE] 
+[t=41] P105 RUN| remaining burst time: 1
+[t=41] Memory: [0..199 FREE] [200..399 P105] [400..1023 FREE] 
 
-========== FINAL GANTT CHART ==========
-Time:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 
-P101:  -  X  X  X  X  X  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P102:  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P103:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P104:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  - 
-P105:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  X  X  X  X  X  X  X 
+---- SYSTEM STATE ----
+Running: P105
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
-========== RR Simulation ==========
+========== Time 42 ==========
+[t=42] P105 RUN| remaining burst time: 0
+[t=42] P105 FINISH
+[t=42] Memory: [0..1023 FREE] 
 
-Policy: RR | Quantum: 3
+---- SYSTEM STATE ----
+Running: NONE
+Ready Queue: EMPTY
+Blocked (Memory): EMPTY
+Blocked (Stove): EMPTY
+Blocked (Payment): EMPTY
+---------------------
 
-========== Time 0 ==========
-[t=0] P101 arrived at restaurant kiosk.
-[t=0] P101 acquired PaymentTerminal.
-[t=0] CPU IDLE.
-[t=0] P101 released PaymentTerminal.
-[t=0] P101 allocated 400 memory units using First-Fit.
-[t=0] Memory: [0..399 P101] [400..1023 FREE] 
+========== FINAL GANTT ==========
+P101: - - X X X - - - X X X - - - - X X X - - - - - - - - - - - - - - - - - - - - - - - - - 
+P102: - - - - - X X X - - - - X X X - - - X X X - - - - - - - - - - - - - - - - - - - - - - 
+P103: - - - - - - - - - - - - - - - - - - - - - X X X - - - - X X X - - - X X X - - - - - - 
+P104: - - - - - - - - - - - - - - - - - - - - - - - - X X X - - - - X X X - - - - - - - - - 
+P105: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - X X X X X X 
 
-========== Time 1 ==========
-[t=1] Scheduler selected P101 using RR.
-[t=1] P101 RUNNING, remaining time = 9.
-[t=1] Memory: [0..399 P101] [400..1023 FREE] 
+Information of process
+PID     Arrival Burst   Memory  State
+101     08:00   9       300     NEW
+102     08:00   9       300     NEW
+103     08:00   9       300     NEW
+104     08:01   6       200     NEW
+105     08:01   6       200     NEW
 
-========== Time 2 ==========
-[t=2] P102 arrived at restaurant kiosk.
-[t=2] P103 arrived at restaurant kiosk.
-[t=2] P103 blocked: PaymentTerminal is busy.
-[t=2] P102 acquired PaymentTerminal.
-[t=2] P101 RUNNING, remaining time = 8.
-[t=2] P102 released PaymentTerminal.
-[t=2] P102 allocated 200 memory units using First-Fit.
-[t=2] P103 acquired PaymentTerminal.
-[t=2] Memory: [0..399 P101] [400..599 P102] [600..1023 FREE] 
-
-========== Time 3 ==========
-[t=3] P101 RUNNING, remaining time = 7.
-[t=3] P101 time slice expired. Moved back to READY.
-[t=3] P103 released PaymentTerminal.
-[t=3] P103 allocated 200 memory units using First-Fit.
-[t=3] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 4 ==========
-[t=4] Scheduler selected P102 using RR.
-[t=4] P102 RUNNING, remaining time = 3.
-[t=4] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 5 ==========
-[t=5] P102 RUNNING, remaining time = 2.
-[t=5] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 6 ==========
-[t=6] P102 RUNNING, remaining time = 1.
-[t=6] P102 time slice expired. Moved back to READY.
-[t=6] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 7 ==========
-[t=7] Scheduler selected P101 using RR.
-[t=7] P101 RUNNING, remaining time = 6.
-[t=7] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 8 ==========
-[t=8] P101 RUNNING, remaining time = 5.
-[t=8] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 9 ==========
-[t=9] P101 RUNNING, remaining time = 4.
-[t=9] P101 time slice expired. Moved back to READY.
-[t=9] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 10 ==========
-[t=10] Scheduler selected P103 using RR.
-[t=10] P103 RUNNING, remaining time = 4.
-[t=10] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 11 ==========
-[t=11] P103 RUNNING, remaining time = 3.
-[t=11] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 12 ==========
-[t=12] P103 RUNNING, remaining time = 2.
-[t=12] P103 time slice expired. Moved back to READY.
-[t=12] Memory: [0..399 P101] [400..599 P102] [600..799 P103] [800..1023 FREE] 
-
-========== Time 13 ==========
-[t=13] Scheduler selected P102 using RR.
-[t=13] P102 RUNNING, remaining time = 0.
-[t=13] P102 TERMINATED. Memory and Stove released.
-[t=13] Memory: [0..399 P101] [400..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 14 ==========
-[t=14] Scheduler selected P101 using RR.
-[t=14] P101 RUNNING, remaining time = 3.
-[t=14] Memory: [0..399 P101] [400..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 15 ==========
-[t=15] P104 arrived at restaurant kiosk.
-[t=15] P104 acquired PaymentTerminal.
-[t=15] P101 RUNNING, remaining time = 2.
-[t=15] P104 released PaymentTerminal.
-[t=15] P104 blocked: not enough contiguous memory.
-[t=15] Memory: [0..399 P101] [400..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 16 ==========
-[t=16] P101 RUNNING, remaining time = 1.
-[t=16] P101 time slice expired. Moved back to READY.
-[t=16] Memory: [0..399 P101] [400..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 17 ==========
-[t=17] Scheduler selected P103 using RR.
-[t=17] P103 RUNNING, remaining time = 1.
-[t=17] Memory: [0..399 P101] [400..599 FREE] [600..799 P103] [800..1023 FREE] 
-
-========== Time 18 ==========
-[t=18] P103 RUNNING, remaining time = 0.
-[t=18] P103 TERMINATED. Memory and Stove released.
-[t=18] Memory: [0..399 P101] [400..1023 FREE] 
-
-========== Time 19 ==========
-[t=19] P104 unblocked from memory wait.
-[t=19] Scheduler selected P101 using RR.
-[t=19] P101 RUNNING, remaining time = 0.
-[t=19] P101 TERMINATED. Memory and Stove released.
-[t=19] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 20 ==========
-[t=20] P105 arrived at restaurant kiosk.
-[t=20] P105 acquired PaymentTerminal.
-[t=20] Scheduler selected P104 using RR.
-[t=20] P104 RUNNING, remaining time = 9.
-[t=20] P105 released PaymentTerminal.
-[t=20] P105 blocked: not enough contiguous memory.
-[t=20] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 21 ==========
-[t=21] P104 RUNNING, remaining time = 8.
-[t=21] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 22 ==========
-[t=22] P104 RUNNING, remaining time = 7.
-[t=22] P104 time slice expired. Moved back to READY.
-[t=22] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 23 ==========
-[t=23] Scheduler selected P104 using RR.
-[t=23] P104 RUNNING, remaining time = 6.
-[t=23] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 24 ==========
-[t=24] P104 RUNNING, remaining time = 5.
-[t=24] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 25 ==========
-[t=25] P104 RUNNING, remaining time = 4.
-[t=25] P104 time slice expired. Moved back to READY.
-[t=25] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 26 ==========
-[t=26] Scheduler selected P104 using RR.
-[t=26] P104 RUNNING, remaining time = 3.
-[t=26] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 27 ==========
-[t=27] P104 RUNNING, remaining time = 2.
-[t=27] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 28 ==========
-[t=28] P104 RUNNING, remaining time = 1.
-[t=28] P104 time slice expired. Moved back to READY.
-[t=28] Memory: [0..399 FREE] [400..899 P104] [900..1023 FREE] 
-
-========== Time 29 ==========
-[t=29] Scheduler selected P104 using RR.
-[t=29] P104 RUNNING, remaining time = 0.
-[t=29] P104 TERMINATED. Memory and Stove released.
-[t=29] Memory: [0..1023 FREE] 
-
-========== Time 30 ==========
-[t=30] P105 unblocked from memory wait.
-[t=30] Scheduler selected P105 using RR.
-[t=30] P105 RUNNING, remaining time = 11.
-[t=30] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 31 ==========
-[t=31] P105 RUNNING, remaining time = 10.
-[t=31] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 32 ==========
-[t=32] P105 RUNNING, remaining time = 9.
-[t=32] P105 time slice expired. Moved back to READY.
-[t=32] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 33 ==========
-[t=33] Scheduler selected P105 using RR.
-[t=33] P105 RUNNING, remaining time = 8.
-[t=33] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 34 ==========
-[t=34] P105 RUNNING, remaining time = 7.
-[t=34] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 35 ==========
-[t=35] P105 RUNNING, remaining time = 6.
-[t=35] P105 time slice expired. Moved back to READY.
-[t=35] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 36 ==========
-[t=36] Scheduler selected P105 using RR.
-[t=36] P105 RUNNING, remaining time = 5.
-[t=36] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 37 ==========
-[t=37] P105 RUNNING, remaining time = 4.
-[t=37] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 38 ==========
-[t=38] P105 RUNNING, remaining time = 3.
-[t=38] P105 time slice expired. Moved back to READY.
-[t=38] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 39 ==========
-[t=39] Scheduler selected P105 using RR.
-[t=39] P105 RUNNING, remaining time = 2.
-[t=39] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 40 ==========
-[t=40] P105 RUNNING, remaining time = 1.
-[t=40] Memory: [0..499 P105] [500..1023 FREE] 
-
-========== Time 41 ==========
-[t=41] P105 RUNNING, remaining time = 0.
-[t=41] P105 TERMINATED. Memory and Stove released.
-[t=41] Memory: [0..1023 FREE] 
-
-========== FINAL GANTT CHART ==========
-Time:  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 
-P101:  -  X  X  X  -  -  -  X  X  X  -  -  -  -  X  X  X  -  -  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P102:  -  -  -  -  X  X  X  -  -  -  -  -  -  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P103:  -  -  -  -  -  -  -  -  -  -  X  X  X  -  -  -  -  X  X  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - 
-P104:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  X  X  X  X  X  -  -  -  -  -  -  -  -  -  -  -  - 
-P105:  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  X  X  X  X  X  X  X  X  X  X  X  X 
-Simulation finished. Check CSV log files.
+Simulation complete.
+CSV log written to: output/log.csv
+Gantt CSV written to: output/gantt.csv
