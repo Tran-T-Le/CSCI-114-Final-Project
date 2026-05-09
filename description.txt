@@ -1,41 +1,37 @@
 
 struct Process
 {
-    int pid; 
-    string arrivalReal; 
-    int arrivalTime;
+    int pid;
+    string arrivalReal;
+    int arrivalTime; // minutes from opening time
     int distinctItemCount;
     vector<OrderItem> items;
-    int burstTime; // burst time 
-    int remainingTime;
-    int memoryNeeded; // Memory
+
+    int burstTime;      // total CPU/kitchen time needed
+    int remainingTime;  // CPU/kitchen burst time left
+    int memoryNeeded;   // prep-space memory requirement
+
+    bool paymentDone;      // true when the payment terminal step finishes
+    bool memoryAllocated;  // true when First-Fit memory allocation succeeds
+
     ProcessState state;
 };
+
 enum ProcessState
 {
-    NEW,
+    NEW, // initialize state
     READY,
     RUNNING,
     BLOCKED_MEMORY,
+    BLOCKED_RESOURCE,
     TERMINATED
 };
-Log example output:
-🟢 Arrival
-[time=0] job=P1 ARRIVED -> READY
-🔴 Blocked
-[time=0] job=P2 BLOCKED (no memory)
-🟡 Running
-[time=2] job=P1 RUNNING remaining=3
-🔵 Finished
-[time=5] job=P1 FINISHED -> TERMINATED
-🟣 Time slice (RR)
-[time=4] job=P1 TIME_SLICE_EXPIRED -> READY
 
 
 Our flow: 
 1. The system first reads data from menu.txt and input.txt. //input file
 2. Each process is created and initialized (arrival time, burst time, memory). //input file
-3. Execution: check memory-> choose process to run-> release  // memory, scheduler and simulation file
+3. Execution
 
 
 
@@ -47,7 +43,18 @@ input.txt :includes pid, real time they order and items(name and quantity)
 menu.txt : include burst time for each item
 
 
+For the scheduler:
+FCFS and RR:
+    Select the first process in the ready queue.
 
+SJF:
+    Select the process with the shortest remainingTime.
+
+After selecting:
+    Remove the process from the ready queue
+    and return it to the simulation loop.
+
+The scheduler only runs when the CPU is idle.
 
 
 For the memory: 
@@ -59,7 +66,7 @@ We use the First-Fit method to allocate memory:
     The system searches for the first contiguous free space that is large enough.
     If found, all elements in that space are set to the process’s pid and change state to READY
     If not found, the process state is changed to BLOCKED.
-Each item needs 50 units of memory per quantity.
+Each item needs 100 units of memory per quantity.
 Example:
     Pho 3, MilkTea 1 → memoryNeeded = 200
 
@@ -67,37 +74,173 @@ Example:
 
 
 For the execution:
-First we set up:  
-2 vector<process *> to store ready and block list
-Start global time from 0 and increase it by 1 each loop
 
-Start the loop : 
-While not all processes are terminated: 
-    I. Update ready and blocked-memory lists by checking memory:  //memory file
-        1. First, check processes in the blocked list ( if any process could allocate memory-> push in blocked list) 
-        2. Then, check newly arrived processes (only when its arrivalTime == global time)  
-            . if any process could allocate memory-> push to ready queue
-            . else(could not allocate memory) -> push to blocked queue
-        * Update ready and blocked lists accordingly (push in ready or blocked queue)
+First, we set up the simulation:
+- Use several process queues:
+  ready queue
+  blocked payment queue
+  paid queue
+  blocked memory queue
+  blocked stove queue
 
-    II. Check if there is a running process:  
-        If there is no running process:  
-            Select a process from the ready list  //scheduler file
-                FCFS and RR: pick the first process in the queue 
-                SJF: pick the process with the shortest burst time  
-        If there is a running process:  
-            Decrease its remaining time  
-            Increase the quantum counter (for RR only)  
-            Check the remaining time:  
-                If remainingTime == 0:  
-                    Change state to TERMINATED  
-                    Release its memory  
-                If remainingTime != 0:  
-                    Check quantum (RR only)  
-                        If quantum expires:  
-                            Move process back to READY  
+- Set running process to nullptr.
+- Clear the Gantt chart.
+- Start global time at 0.
+- Set finishedCount to 0.
+- Set quantumCounter to 0.
+- Set paymentTimeLeft to 0.
 
-    III. Increase global time by 1  
+Start the loop:
 
+While not all processes are terminated:
+
+I. Update the current payment process
+
+    If the payment terminal is busy:
+        Find the process using the payment terminal.
+        Decrease paymentTimeLeft after the payment has started.
+
+        If paymentTimeLeft becomes 0:
+            The process finishes payment.
+            Release the payment terminal.
+            Move the process to paidQueue.
+
+        Else:
+            The process is still paying.
+
+II. Start payment for blocked payment processes
+
+    If the payment terminal is free
+    and blockedPayment is not empty:
+
+        Take the first process from blockedPayment.
+        Let it acquire the payment terminal.
+        Set paymentTimeLeft to PAYMENT_TIME.
+        Set paymentStartTime to currentTime.
+
+III. Move paid processes to memory allocation
+
+    For each process in paidQueue:
+        Try to allocate memory.
+
+        If memory allocation succeeds:
+            Change state to READY.
+            Push the process into the ready queue.
+
+        Else:
+            Change state to BLOCKED_MEMORY.
+            Push the process into blockedMemory.
+
+IV. Check newly arrived processes
+
+    For each process:
+        If its arrivalTime equals currentTime
+        and its state is NEW:
+
+            Mark it as arrived.
+
+            If the payment terminal is free:
+                Let the process acquire the payment terminal.
+                Start payment.
+
+            Else:
+                Push the process into blockedPayment.
+
+V. Retry blocked stove processes
+
+    For each process in blockedStove:
+        Check whether it already has a stove
+        or can acquire an available stove.
+
+        If yes:
+            Change state to READY.
+            Push the process back into the ready queue.
+
+        Else:
+            Keep it in blockedStove.
+
+VI. Retry blocked memory processes
+
+    For each process in blockedMemory:
+        Try to allocate memory again.
+
+        If memory allocation succeeds:
+            Change state to READY.
+            Push the process into the ready queue.
+
+        Else:
+            Keep it in blockedMemory.
+
+VII. Schedule a process
+
+    If there is no running process:
+        Select a process from the ready queue based on the scheduling policy.
+
+        FCFS:
+            Pick the first process in the ready queue.
+
+        SJF:
+            Pick the process with the shortest remaining/burst time.
+
+        RR:
+            Pick the first process in the ready queue.
+
+        After selecting a process:
+            Check stove availability.
+
+            If the process already has a stove
+            or can acquire a stove:
+                Change state to RUNNING.
+                Set it as the running process.
+                Reset quantumCounter.
+
+            Else:
+                Change state to BLOCKED_RESOURCE.
+                Push it into blockedStove.
+
+VIII. Execute the running process
+
+    If there is a running process:
+        Decrease its remainingTime by 1.
+
+        If the policy is RR:
+            Increase quantumCounter by 1.
+
+        Update the Gantt chart.
+
+        If remainingTime becomes 0:
+            Change state to TERMINATED.
+            Release its stove.
+            Release its memory.
+            Increase finishedCount.
+            Set running to nullptr.
+            Reset quantumCounter.
+
+        Else if the policy is RR
+        and quantumCounter reaches the time quantum:
+            Change state to READY.
+            Push the process back into the ready queue.
+            Keep the stove.
+            Set running to nullptr.
+            Reset quantumCounter.
+
+    Else:
+        CPU is idle.
+
+IX. Print system state
+
+    Display memory state.
+    Display running process.
+    Display ready queue.
+    Display blocked memory queue.
+    Display blocked stove queue.
+    Display blocked payment queue.
+
+X. Increase global time
+
+    currentTime = currentTime + 1
+
+After the loop ends:
+    Print the final Gantt chart.
 
     
